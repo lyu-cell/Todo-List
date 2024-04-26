@@ -1,17 +1,38 @@
-const makeProject = (function() {
+const project = (function() {
     const arrayStorage = [["Project Name: Default"]]
 
-    const newProject = (projectName) => {
+    const initializeProject = (projectName) => {
         const project = [`Project Name: ${projectName}`]
         arrayStorage.push(project)
     }
 
-    const showLatest = () => {
+    const showLatestArray = () => {
         console.log(arrayStorage[arrayStorage.length - 1])
         console.log(arrayStorage)
     }
 
-    return {newProject, showLatest}
+
+    const appendTask = (project, task, index) => {
+        for (let i = 0; i < arrayStorage.length; i++) {
+            if (arrayStorage[i].includes(project) === true) {        
+                arrayStorage[0].push(task)
+
+                if (typeof index === 'number') {
+                    console.log("breaks in first")
+                    arrayStorage[i].splice(index, 0, task)
+                    break
+                } 
+                else {
+                    console.log("breaks in second")
+                    arrayStorage[i].push(task)
+                    break
+                }
+            }
+
+        }
+    }
+
+    return {initializeProject, showLatestArray, appendTask}
 })()
 
-export {makeProject}
+export {project}
