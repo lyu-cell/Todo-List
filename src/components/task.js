@@ -1,23 +1,24 @@
-class initializeTask {
-    constructor (title, priority, status) {
-        this.title = title;
-        this.priority = priority;
-        this.status = status;
+import { project } from "./project";
+
+
+const task = (function() {
+    
+    class TaskInitialize {
+        constructor(title, description, priority, status) {
+            this.title = title;
+            this.description = description;
+            this.priority = priority;
+            this.status = status;
+        }
     }
 
-}
-
-const createTask = {
+    const sendTask = (title, description, priority, status, taskLocation, index) => {
+        const task = new TaskInitialize(title, description, priority, status, priority)
+        project.appendTask(taskLocation, task, index)
+    }
     
-    defaultProject: [],
-    invokeInitializer: function(title, priority, status) {
-        const task = new initializeTask(title, priority, status)
-        createTask.defaultProject.push(task)
-        createTask.showLatestItem()
-    },
+    return {sendTask}
+})()
 
-    showLatestItem: () => console.log(createTask.defaultProject[createTask.defaultProject.length -1])
+export {task}
 
-}
-
-export {createTask}
