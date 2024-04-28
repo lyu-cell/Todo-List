@@ -12,12 +12,22 @@ const task = (function() {
         }
     }
 
-    const sendTask = (title, description, priority, status, taskLocation, index) => {
+    const sendTask = (title, description, priority, status, taskLocation) => {
         const task = new TaskInitialize(title, description, priority, status, priority)
-        project.appendTask(taskLocation, task, index)
+        project.appendTask(taskLocation, task)
+    }
+
+    const changeStatusAndPriority = (property, changeTo, title) => {
+        for (let i = 0; i < project.arrayStorage.length; i++) {
+            project.arrayStorage[i].forEach(Element => {
+                if (typeof Element === "object" && Element.title === title) {
+                    Object.defineProperty(Element, property, {value: changeTo})
+                }
+            })
+        }
     }
     
-    return {sendTask}
+    return {sendTask, changeStatusAndPriority}
 })()
 
 export {task}
