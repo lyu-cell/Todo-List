@@ -1,3 +1,83 @@
 body{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 1fr 5fr;
+    height: 100vh;
+    width: 100vw;
     background-color: black;
+    padding: 0;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    grid-column: 1/3;
+    grid-row: 1/2;
+    height: auto;
+    height: 105px;
+    background-color: green;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    font-size: xx-large;
+    font-weight: 900;
+}
+
+.sidebar {
+    display: grid;
+    grid-template-rows: .5fr .2fr .6fr;
+    grid-column: 1/2;
+    grid-row: 2/3;
+    background-color: rgb(7, 3, 106);
+    height: auto;
+    width: auto;
+    color: white;
+}
+
+#content {
+    grid-column: 2/3;
+    grid-row: 2/3;
+    background-color: rgb(22, 90, 90);
+}
+
+.createBtn {
+    border: 1px solid green;
+    grid-row: 3/4;
+    height: 40px;
+    width: 40px;
+    font-size: xx-large;
+    justify-self: center;
+    align-self: center;
+}
+
+.projectContainer {
+    padding: 30px;
+    width: 135px;
+    height: 200px;
+    overflow-y: scroll;
+    border-bottom: none;
+    grid-row: 2/3;
+
+    display: flex;
+    flex-flow: column;
+    justify-self: center;
+}
+
+.project {
+    display: flex;
+    width: 100px;
+    flex-flow: row;
+    flex-wrap: wrap;
+    height: 399px;
+}
+
+.defaultContianer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    font-style: italic;
 }
