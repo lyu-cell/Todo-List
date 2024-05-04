@@ -4,7 +4,7 @@ const project = (function() {
 
     
     const initializeProject = (projectName) => {
-        arrayStorage.push([`${projectName}`])
+        arrayStorage.push([`#${projectName}`])
         updateLocalStorage()       
     }
 
@@ -28,7 +28,7 @@ const project = (function() {
         
         const appendDefault = (() => {
             if (localStorage.arrayStorage === "" && arrayStorage.length === 0) {
-                arrayStorage.push(["Home"])
+                arrayStorage.push(["#Home"])
             }
         })()
 

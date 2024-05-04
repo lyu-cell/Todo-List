@@ -2,26 +2,55 @@ import { project } from "./project";
 import { task } from "./task";
 
 const generateElement = (function() {
+    const createElements = (function() {
+        const projectBtn = document.createElement("button")
+        const logo = document.createElement("div")
+        const projectContainer = document.createElement("div")
+        const dialog = document.createElement("dialog")
+        const form = document.createElement("form")
+        const name = document.createElement("label")
+        const nameInput = document.createElement("input")
+        const submitBtn = document.createElement("button")
+        const defaultContainer = document.createElement("div")
+        const defaultPro = document.createElement("div")
+        const taskDisplay = document.createElement("div")
+        const title = document.createElement("div")        
+        const taskContainer = document.createElement("div")
+                
+        
+        return {projectBtn, logo, projectContainer, dialog, form, name, nameInput, submitBtn, 
+                defaultContainer, defaultPro, taskDisplay, title, taskContainer}
+    })()
+
+    const assignClass = (function() {
+        createElements.projectBtn.classList.add("createBtn")
+        createElements.logo.classList.add("logo");
+        createElements.projectContainer.classList.add("projectContainer")
+        createElements.submitBtn.classList.add("submitBtn")
+        createElements.defaultContainer.classList.add("defaultContianer")
+        createElements.taskDisplay.classList.add("taskDisplay")
+        createElements.title.classList.add("title")
+        createElements.defaultPro.classList.add("defaultProject")
+    })()
+    
     const getElement = (function() {
         const header = document.querySelector("header")
         const sideBar = document.querySelector(".sidebar")
-        return {header, sideBar}
+        const content = document.querySelector("#content")
+        
+        return {header, sideBar, content}
     })()
     
 
-    const createElement = (function() {
-        const createProjectBtn = document.createElement("button")
-        createProjectBtn.textContent = "+"
-        createProjectBtn.classList.add("createBtn")
-        getElement.sideBar.appendChild(createProjectBtn)
+    const createProjectBtn = (function() {
+        createElements.projectBtn.textContent = "+"
+        getElement.sideBar.appendChild(createElements.projectBtn)
     })()
 
     const MainHeader = (function() {
         const createLogo = (function() {
-            const logo = document.createElement("div")
-            logo.classList.add("logo");
-            logo.textContent = "Lyu Todo List"
-            getElement.header.appendChild(logo)
+            createElements.logo.textContent = "Lyu Todo List"
+            getElement.header.appendChild(createElements.logo)
         })()
     })()
 
@@ -29,52 +58,41 @@ const generateElement = (function() {
         const project = (function() {
             
             const Storage = (function() {
-                const projectContainer = document.createElement("div")
-                projectContainer.classList.add("projectContainer")
-                getElement.sideBar.appendChild(projectContainer)
-                return {projectContainer}
+                getElement.sideBar.appendChild(createElements.projectContainer)
             })()
 
             const addProject = (function() {
-                const content = document.querySelector("#content")
-                const dialog = document.createElement("dialog")
-                const form = document.createElement("form")
-                const name = document.createElement("label")
-                const nameInput = document.createElement("input")
-                const submitBtn = document.createElement("button")
-                submitBtn.textContent = "Submit"
-                submitBtn.classList.add("submitBtn")
-                nameInput.setAttribute("id", "name")
-                name.setAttribute("for", "name")
-                name.textContent = "Name: "
-                content.appendChild(dialog)
-                dialog.appendChild(form)
-                form.appendChild(name)
-                form.appendChild(nameInput)
-                form.appendChild(submitBtn)
+                createElements.submitBtn.textContent = "Submit"
+                createElements.nameInput.setAttribute("id", "name")
+                createElements.name.setAttribute("for", "name")
+                createElements.name.textContent = "Name: "
+                getElement.content.appendChild(createElements.dialog)
+                createElements.dialog.appendChild(createElements.form)
+                createElements.form.appendChild(createElements.name)
+                createElements.form.appendChild(createElements.nameInput)
+                createElements.form.appendChild(createElements.submitBtn)
 
-                const projectContainer = document.querySelector(".projectContainer")
-                function ExProject(name) {       
+                function AddProjectToContainer(name) {
                     const pro = document.createElement("div")
                     pro.textContent = `${name}`       
-                    projectContainer.appendChild(pro)
+                    createElements.projectContainer.appendChild(pro)
 
                 }
 
-                document.querySelector(".createBtn").addEventListener("click", () => {
-                    dialog.showModal()
+                createElements.projectBtn.addEventListener("click", () => {
+                    createElements.dialog.showModal()
                 }) 
 
-                submitBtn.addEventListener("click", (e) => {
+                createElements.submitBtn.addEventListener("click", (e) => {
                     e.preventDefault()
                     
-                    if(nameInput.value !== '') {
-                        ExProject(nameInput.value)
-                        nameInput.value = ""
-                        dialog.close()
+                    if(createElements.nameInput.value !== '') {
+                        AddProjectToContainer(createElements.nameInput.value)
+                        createElements.nameInput.value = ""
+                        createElements.dialog.close()
                     }
                     else {
-                        console.log("Enter something in words")
+                        alert("Enter something in words")
                     }
                 })
                 
@@ -83,20 +101,21 @@ const generateElement = (function() {
             const addDefaultProject = (function() {
                 let array = JSON.parse(localStorage.arrayStorage)
                 let defaultProject = array[0][0]
-                const defaultContainer = document.createElement("div")
-                const defaultPro = document.createElement("div")
-                defaultContainer.classList.add("defaultContianer")
-                defaultPro.classList.add("defaultProject")
-                getElement.sideBar.appendChild(defaultContainer)
-                defaultContainer.appendChild(defaultPro)
-                defaultPro.textContent = `${defaultProject}`
-                
-            })() 
+                getElement.sideBar.appendChild(createElements.defaultContainer)
+                createElements.defaultContainer.appendChild(createElements.defaultPro)
+                createElements.defaultPro.textContent = `${defaultProject}`
+                return {defaultProject}
+            })()
 
+            const displayProject = (function() {
+                createElements.taskContainer.appendChild(createElements.title)
+                createElements.taskContainer.appendChild(createElements.taskDisplay)
+                createElements.title.textContent = `${addDefaultProject.defaultProject}`
+                createElements.taskContainer.classList.add("taskContainer")
+                getElement.content.appendChild(createElements.taskContainer)
+            })()
         })()
-        
     })()
-
 })()
 
 
