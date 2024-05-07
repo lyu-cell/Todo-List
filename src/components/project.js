@@ -47,7 +47,7 @@ const project = (function() {
         })()
     }
     updateLocalStorage()
-    return {initializeProject, showLatestArray, appendTask, arrayStorage}
+    return {initializeProject, showLatestArray, appendTask, arrayStorage, updateLocalStorage}
 })()
 
 export {project}
