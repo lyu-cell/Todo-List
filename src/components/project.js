@@ -14,7 +14,6 @@ const project = (function() {
 
 
     const appendTask = (project, task) => {
-        console.log("task")
         for (let i = 0; i < arrayStorage.length; i++) {
             if (arrayStorage[i].includes(project) === true) {        
                 arrayStorage[0].push(task)
@@ -40,11 +39,9 @@ const project = (function() {
     })()
     
     const updateLocalStorage = () => {
-        const update = (() => {
-            if (arrayStorage.length !== 0) {
-                localStorage.arrayStorage = JSON.stringify(arrayStorage)
-            }
-        })()
+        if (arrayStorage.length !== 0) {
+            localStorage.arrayStorage = JSON.stringify(arrayStorage)
+        }
     }
     updateLocalStorage()
     return {initializeProject, showLatestArray, appendTask, arrayStorage, updateLocalStorage}

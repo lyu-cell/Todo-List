@@ -4,16 +4,14 @@ import { project } from "./project";
 const task = (function() {
     
     class TaskInitialize {
-        constructor(title, description, priority, status) {
+        constructor(title, date) {
             this.title = title;
-            this.description = description;
-            this.priority = priority;
-            this.status = status;
+            this.date = date;
         }
     }
 
-    const sendTask = (title, description, priority, status, taskLocation) => {
-        const task = new TaskInitialize(title, description, priority, status, priority)
+    const sendTask = (title, date, taskLocation) => {
+        const task = new TaskInitialize(title, date)
         project.appendTask(taskLocation, task)
     }
 

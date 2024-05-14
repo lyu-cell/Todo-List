@@ -1,5 +1,5 @@
-import { project } from "./project";
-import { task } from "./task";
+import { project } from "./project.js";
+import { task } from "./task.js";
 
 
 // here the elements are generated
@@ -9,7 +9,7 @@ const generate = (function() {
         const logo = document.createElement("div")
         const projectContainer = document.createElement("div")
         const dialog = document.createElement("dialog")
-        const name = document.createElement("label")
+        const projectInputLabel = document.createElement("label")
         const nameInput = document.createElement("input")
         const submitBtn = document.createElement("button")
         const defaultContainer = document.createElement("div")
@@ -35,7 +35,7 @@ const generate = (function() {
         const taskFormSUbmitBtn = document.createElement("button");
 
         
-        return {projectBtn, logo, projectContainer, dialog, name, nameInput, submitBtn, 
+        return {projectBtn, logo, projectContainer, dialog, projectInputLabel, nameInput, submitBtn, 
                 defaultContainer, defaultPro, title, mainFormContainer, formHeader, taskTitle, dateInput, taskDetails,
                 formWrapper, formDisplay, taskFormText, dateLabel, projectFormText, projectFormContainer,
                 priorityLabel, priorityOptionContainer, priorityLow, priorityHigh, priorityExtreme, taskFormSUbmitBtn,
@@ -120,9 +120,9 @@ const sideBarUi = (function() {
 
     const formMaker = (function() {
         generate.element.submitBtn.textContent = "Submit"
-        generate.element.nameInput.setAttribute("id", "name")
-        generate.element.name.setAttribute("for", "name")
-        generate.element.name.textContent = "Name: "
+        generate.element.nameInput.setAttribute("id", "projectInputLabel")
+        generate.element.projectInputLabel.setAttribute("for", "projectInputLabel")
+        generate.element.projectInputLabel.textContent = "Name: "
         getElement.content.appendChild(generate.element.dialog)
         generate.element.dialog.appendChild(generate.element.mainFormContainer)
         generate.element.mainFormContainer.appendChild(generate.element.formHeader)
@@ -138,7 +138,7 @@ const sideBarUi = (function() {
         projectForm.classList.add("projectForm")
         
         generate.element.formDisplay.appendChild(projectForm)
-        projectForm.appendChild(generate.element.name)
+        projectForm.appendChild(generate.element.projectInputLabel)
         projectForm.appendChild(generate.element.nameInput)
         projectForm.appendChild(generate.element.submitBtn)
     }
@@ -147,7 +147,7 @@ const sideBarUi = (function() {
         const taskForm = document.createElement("form")
         taskForm.classList.add("taskForm")
         
-        
+        generate.element.taskTitle.setAttribute("maxlength", "40")
         generate.element.dateInput.setAttribute("type", "date")
         generate.element.dateInput.setAttribute("id", "date")
 
@@ -175,6 +175,7 @@ const sideBarUi = (function() {
         })
 
         addTaskForm()
+        
         const switchBetweenForms = (function() {
             const formDisplay = document.querySelector(".formDisplay")
             
@@ -204,9 +205,6 @@ const sideBarUi = (function() {
         
     })()
 
-    const defaultTaskContainer = (function() {
-        getElement.sideBar.appendChild(generate.element.defaultPro)
-    })()
         
 })()
 
@@ -233,7 +231,7 @@ const displayProjectContents = function() {
     taskDisplay.appendChild(projectName)
     
     
-    const task = function(title, date) {
+    const taskUI = function(title, date) {
         // elements are created here...
         const taskInfoContainer = document.createElement("div")
         const checkBoxAndTitleWrapper = document.createElement("div")
@@ -277,15 +275,66 @@ const displayProjectContents = function() {
         detailsToDeleteWrapper.appendChild(taskEdit)
         detailsToDeleteWrapper.appendChild(taskDelete)
     }
+    
+    const appendProjectUi = (function() {
+        function makeAndAppendProjectUI () {
+            let arrayStore = JSON.parse(localStorage.arrayStorage)
+            const projectUI = document.createElement("div");
+            projectUI.textContent = `${arrayStore[arrayStore.length - 1][0]}`
+            projectUI.setAttribute("data-key", `${arrayStore.length - 1}`)
+            generate.element.projectContainer.appendChild(projectUI)
+        }
 
+        const appendProjectToLocal = (function() {
+            generate.element.submitBtn.addEventListener("click", (e) => {
+                e.preventDefault()
+                if (generate.element.nameInput.value !== "") {
+                    project.initializeProject(`${generate.element.nameInput.value}`)
+                    makeAndAppendProjectUI()
+                }
+                generate.element.dialog.close()
+            })
+        })()
+
+    })()
 }
 
+
+function appendAllProjectFromLocal () {
+    function makeAllProjectUi(projectName, index) {
+        const projectContainer = document.querySelector(".projectContainer")
+        const projectUI = document.createElement("div");
+
+
+        if(projectName === "#Home" || index === 0) {
+            projectUI.textContent = `${projectName}`
+            projectUI.setAttribute("data-key", `${index}`)
+            projectUI.classList.add("defaultProject")
+            projectContainer.appendChild(projectUI)    
+        }
+        else {
+            projectUI.textContent = `${projectName}`
+            projectUI.setAttribute("data-key", `${index}`)
+            projectContainer.appendChild(projectUI)
+        }
+        
+    }
+
+    const makeAllProjectAppear = (function() {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage)
+
+        for(let i = 0; i < arrayStorage.length; i++) {
+            makeAllProjectUi(arrayStorage[i][0], i)
+        }
+    })()
+
+}
 
 displayProjectContents()
 
 
 
-export {generate}
+export {generate, appendAllProjectFromLocal}
 
 
 

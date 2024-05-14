@@ -28,7 +28,7 @@ header {
 
 .sidebar {
     display: grid;
-    grid-template-rows: .6fr .3fr .4fr;
+    grid-template-rows: 1fr .2fr;
     grid-column: 1/2;
     grid-row: 2/3;
     background-color: rgb(7, 3, 106);
@@ -48,25 +48,12 @@ header {
 
 .createBtn {
     border: 1px solid green;
-    grid-row: 3/4;
+    grid-row: 2/3;
     height: 40px;
     width: 40px;
     font-size: xx-large;
     justify-self: center;
     align-self: center;
-}
-
-.projectContainer {
-    padding: 30px;
-    width: 135px;
-    height: 200px;
-    overflow-y: auto;
-    border-bottom: none;
-    grid-row: 2/3;
-
-    display: flex;
-    flex-flow: column;
-    justify-self: center;
 }
 
 .project {
@@ -175,10 +162,13 @@ header {
 
 dialog {
     padding: 0;
+    background-color: black;
+    color: white;
+    border: 1px solid purple;
 }
 
 dialog::backdrop {
-    background-color: palegreen;
+    background-color: black;
     opacity: .8;
 }
 
@@ -189,7 +179,7 @@ dialog::backdrop {
     grid-template-rows: 1fr 5fr;
     height: 350px;
     width: 500px;
-    border: 1px solid greenyellow;
+    border: 1px solid purple;
 }
 
 .formHeader {
@@ -204,44 +194,49 @@ dialog::backdrop {
 .formWrapper {
     display: flex;
     flex-direction: column;
-    border: 1px solid green;
+    border: 1px solid purple;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     padding-top: 20px;
 }
 
 
 .formDisplay {
     display: flex;
-    border: 1px solid yellow;
+    border: 1px solid purple;
     justify-content: start;
     padding-left: 20px;
     padding-top: 8px
 }
 
-#name {
+#projectInputLabel {
     height: 10px;
     width: 140px;
     margin-left: 5px;
 }
 
 .projectFormContainer {
-    border: 1px solid black;
+    border: 1px solid purple;
 }
 
+.taskFormText,
 .projectFormText {
     cursor: pointer;
-}
-
-.taskFormText {
-    cursor: pointer;
-}
-
-.defaultProject {
     display: flex;
+    height: 30px;
+    width: 100%;
     justify-content: center;
     align-items: center;
+    font-size: large;
+
 }
+
+.taskFormText:hover,
+.projectFormText:hover {
+    background-color: purple;
+    color: white;
+}
+
 
 .projectName {
     display: flex;
@@ -369,3 +364,30 @@ dialog::backdrop {
     color: white;
     background-color: #8b5cf6;
 }
+
+.projectContainer {
+    display: flex;
+    flex-flow: column;
+    justify-self: center;
+    padding: 30px;
+    width: 135px;
+    height: 380px;
+    overflow-y: auto;
+    border-bottom: none;
+    grid-row: 1/2;
+    gap: 15px;
+}
+
+.projectContainer > div {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+}
+
+.projectContainer > div:hover {
+    color: purple;
+    font-size: larger;
+    background-color: white;
+}
+
