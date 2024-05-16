@@ -9,5 +9,31 @@
     <header></header>
     <div id="content"></div>
     <div class="sidebar"></div>
+    <script>
+        function projectBackgroundUi (name) {
+            const content = document.querySelector("#content")
+            if(document.querySelector(".taskDisplay") !== null) {
+                content.removeChild(document.querySelector(".taskDisplay"))
+            }
+            const projectName = document.createElement("div")
+            const taskDisplay = document.createElement("div")
+
+            taskDisplay.classList.add("taskDisplay");
+            projectName.classList.add("projectName");
+
+
+            projectName.textContent = `${name}`
+
+            content.appendChild(taskDisplay)
+            taskDisplay.appendChild(projectName)
+        }
+        
+        function sendProjectIndex () {
+            const arrayStorage = JSON.parse(localStorage.arrayStorage)
+            projectBackgroundUi(arrayStorage[event.target.dataset.key][0])
+        }
+
+        
+    </script>
 </body>
 </html>

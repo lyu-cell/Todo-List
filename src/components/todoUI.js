@@ -214,21 +214,6 @@ const sideBarUi = (function() {
 
 const displayProjectContents = function() {
     
-    // make elements here...
-    const projectName = document.createElement("div")
-    const taskDisplay = document.createElement("div")
-    
-
-    // assign classes here...
-    taskDisplay.classList.add("taskDisplay");
-    projectName.classList.add("projectName")
-
-
-    projectName.textContent = "Default"
-
-    // append elements here..
-    getElement.content.appendChild(taskDisplay)
-    taskDisplay.appendChild(projectName)
     
     
     const taskUI = function(title, date) {
@@ -265,7 +250,7 @@ const displayProjectContents = function() {
         
 
         // elements are appended here...
-        taskDisplay.appendChild(taskInfoContainer)
+        generate.element.taskDisplay.appendChild(taskInfoContainer)
         taskInfoContainer.appendChild(checkBoxAndTitleWrapper)
         taskInfoContainer.appendChild(detailsToDeleteWrapper)
         checkBoxAndTitleWrapper.appendChild(checkBox)
@@ -275,13 +260,16 @@ const displayProjectContents = function() {
         detailsToDeleteWrapper.appendChild(taskEdit)
         detailsToDeleteWrapper.appendChild(taskDelete)
     }
-    
+
+
     const appendProjectUi = (function() {
         function makeAndAppendProjectUI () {
             let arrayStore = JSON.parse(localStorage.arrayStorage)
             const projectUI = document.createElement("div");
             projectUI.textContent = `${arrayStore[arrayStore.length - 1][0]}`
             projectUI.setAttribute("data-key", `${arrayStore.length - 1}`)
+            projectUI.setAttribute("onclick", "sendProjectIndex()")
+            projectUI.classList.add("allProject")
             generate.element.projectContainer.appendChild(projectUI)
         }
 
@@ -297,6 +285,8 @@ const displayProjectContents = function() {
         })()
 
     })()
+
+    return {taskUI}
 }
 
 
@@ -310,11 +300,15 @@ function appendAllProjectFromLocal () {
             projectUI.textContent = `${projectName}`
             projectUI.setAttribute("data-key", `${index}`)
             projectUI.classList.add("defaultProject")
+            projectUI.classList.add("allProject")
+            projectUI.setAttribute("onclick", "sendProjectIndex()")
             projectContainer.appendChild(projectUI)    
         }
         else {
             projectUI.textContent = `${projectName}`
             projectUI.setAttribute("data-key", `${index}`)
+            projectUI.classList.add("allProject")
+            projectUI.setAttribute("onclick", "sendProjectIndex()")
             projectContainer.appendChild(projectUI)
         }
         
@@ -330,11 +324,48 @@ function appendAllProjectFromLocal () {
 
 }
 
+const showHomeProjectContent = (function() {
+    const content = document.querySelector("#content")
+    const projectName = document.createElement("div")
+    const taskDisplay = document.createElement("div")
+    
+    taskDisplay.classList.add("taskDisplay");
+    projectName.classList.add("projectName");
+    projectName.textContent = "#Home"
+    
+    content.appendChild(taskDisplay)
+    taskDisplay.appendChild(projectName)
+})()
+
+function backgroundUi () {
+    function projectBackgroundUi (name) {
+        const projectName = document.createElement("div")
+        const taskDisplay = document.createElement("div")
+
+
+        // assign classes here...
+        taskDisplay.classList.add("taskDisplay");
+        projectName.classList.add("projectName");
+
+
+        projectName.textContent = `${name}`
+
+        // append elements here..
+        getElement.content.appendChild(taskDisplay)
+        taskDisplay.appendChild(projectName)
+    }
+
+    return {projectBackgroundUi}
+}
+
+
+    
+
+
 displayProjectContents()
 
 
-
-export {generate, appendAllProjectFromLocal}
+export {generate, appendAllProjectFromLocal, backgroundUi}
 
 
 
