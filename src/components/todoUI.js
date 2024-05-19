@@ -212,56 +212,7 @@ const sideBarUi = (function() {
 
 
 
-const displayProjectContents = function() {
-    
-    
-    
-    const taskUI = function(title, date) {
-        // elements are created here...
-        const taskInfoContainer = document.createElement("div")
-        const checkBoxAndTitleWrapper = document.createElement("div")
-        const detailsToDeleteWrapper = document.createElement("div")
-        const checkBox = document.createElement("input")
-        const taskTitle = document.createElement("div")
-        const taskDetails = document.createElement("button")
-        const taskDate = document.createElement("div")
-        const taskEdit = document.createElement("button")
-        const taskDelete = document.createElement("div")
-
-
-        // classes are assigned here...
-        taskInfoContainer.classList.add("taskInfoContainer")
-        checkBoxAndTitleWrapper.classList.add("checkBoxTitleWrapper")
-        detailsToDeleteWrapper.classList.add("detailsToDeleteWrapper")
-        checkBox.classList.add("taskCheckBox")
-        taskTitle.classList.add("taskTitle")
-        taskDetails.classList.add("taskDetails")
-        taskDate.classList.add("taskDate")
-        taskEdit.classList.add("taskEdit")
-        taskDelete.classList.add("taskDelete")
-
-
-        checkBox.setAttribute("type", "checkbox")
-        taskTitle.textContent = `${title}`
-        taskDetails.textContent = "Details"
-        taskDate.textContent = `${date}`
-        taskEdit.textContent = "Edit"
-        taskDelete.textContent = "Delete"
-        
-
-        // elements are appended here...
-        generate.element.taskDisplay.appendChild(taskInfoContainer)
-        taskInfoContainer.appendChild(checkBoxAndTitleWrapper)
-        taskInfoContainer.appendChild(detailsToDeleteWrapper)
-        checkBoxAndTitleWrapper.appendChild(checkBox)
-        checkBoxAndTitleWrapper.appendChild(taskTitle)
-        detailsToDeleteWrapper.appendChild(taskDetails)
-        detailsToDeleteWrapper.appendChild(taskDate)
-        detailsToDeleteWrapper.appendChild(taskEdit)
-        detailsToDeleteWrapper.appendChild(taskDelete)
-    }
-
-
+const displayProjectContents = (function() {
     const appendProjectUi = (function() {
         function makeAndAppendProjectUI () {
             let arrayStore = JSON.parse(localStorage.arrayStorage)
@@ -285,9 +236,10 @@ const displayProjectContents = function() {
         })()
 
     })()
+})()
 
-    return {taskUI}
-}
+
+
 
 
 function appendAllProjectFromLocal () {
@@ -328,44 +280,91 @@ const showHomeProjectContent = (function() {
     const content = document.querySelector("#content")
     const projectName = document.createElement("div")
     const taskDisplay = document.createElement("div")
+    const taskContainer = document.createElement("div")
     
     taskDisplay.classList.add("taskDisplay");
     projectName.classList.add("projectName");
+    taskContainer.classList.add("taskContainer")
     projectName.textContent = "#Home"
+    projectName.setAttribute("data-key", "0")
     
     content.appendChild(taskDisplay)
     taskDisplay.appendChild(projectName)
+    taskDisplay.appendChild(taskContainer)
 })()
 
-function backgroundUi () {
-    function projectBackgroundUi (name) {
-        const projectName = document.createElement("div")
-        const taskDisplay = document.createElement("div")
 
 
-        // assign classes here...
-        taskDisplay.classList.add("taskDisplay");
-        projectName.classList.add("projectName");
-
-
-        projectName.textContent = `${name}`
-
-        // append elements here..
-        getElement.content.appendChild(taskDisplay)
-        taskDisplay.appendChild(projectName)
+generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
+    e.preventDefault()
+    const taskTitle = generate.element.taskTitle
+    const dateInput = generate.element.dateInput
+    let index = 0
+    const currentProject = document.querySelector(".projectName")
+    if (currentProject.dataset.key !== '0') {
+        index = currentProject.dataset.key
     }
+    //displayProjectContents.taskUI(generate.element.taskTitle.value, generate.element.dateInput.value)
+    if(taskTitle.value !== '' && dateInput.value !== '') {
+        task.sendTask(taskTitle.value, dateInput.value, index)
+        taskUI(taskTitle.value, dateInput.value)
+        generate.element.dialog.close()
+    }
+})
 
-    return {projectBackgroundUi}
+
+
+function taskUI (title, date) {
+    // elements are created here...
+    const taskContainer = document.querySelector(".taskContainer")
+    const taskInfoContainer = document.createElement("div")
+    const checkBoxAndTitleWrapper = document.createElement("div")
+    const detailsToDeleteWrapper = document.createElement("div")
+    const checkBox = document.createElement("input")
+    const taskTitle = document.createElement("div")
+    const taskDetails = document.createElement("button")
+    const taskDate = document.createElement("div")
+    const taskEdit = document.createElement("button")
+    const taskDelete = document.createElement("div")
+
+
+    // classes are assigned here...
+    taskInfoContainer.classList.add("taskInfoContainer")
+    checkBoxAndTitleWrapper.classList.add("checkBoxTitleWrapper")
+    detailsToDeleteWrapper.classList.add("detailsToDeleteWrapper")
+    checkBox.classList.add("taskCheckBox")
+    taskTitle.classList.add("taskTitle")
+    taskDetails.classList.add("taskDetails")
+    taskDate.classList.add("taskDate")
+    taskEdit.classList.add("taskEdit")
+    taskDelete.classList.add("taskDelete")
+
+
+    checkBox.setAttribute("type", "checkbox")
+    taskTitle.textContent = `${title}`
+    taskDetails.textContent = "Details"
+    taskDate.textContent = `${date}`
+    taskEdit.textContent = "Edit"
+    taskDelete.textContent = "Delete"
+    
+
+    // elements are appended here...
+    taskContainer.appendChild(taskInfoContainer)
+    taskInfoContainer.appendChild(checkBoxAndTitleWrapper)
+    taskInfoContainer.appendChild(detailsToDeleteWrapper)
+    checkBoxAndTitleWrapper.appendChild(checkBox)
+    checkBoxAndTitleWrapper.appendChild(taskTitle)
+    detailsToDeleteWrapper.appendChild(taskDetails)
+    detailsToDeleteWrapper.appendChild(taskDate)
+    detailsToDeleteWrapper.appendChild(taskEdit)
+    detailsToDeleteWrapper.appendChild(taskDelete)
 }
 
 
-    
+// check the styles and stuff of taskInfoContainer
 
 
-displayProjectContents()
-
-
-export {generate, appendAllProjectFromLocal, backgroundUi}
+export {generate, appendAllProjectFromLocal}
 
 
 

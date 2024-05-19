@@ -14,11 +14,7 @@ const project = (function() {
 
 
     const appendTask = (project, task) => {
-        for (let i = 0; i < arrayStorage.length; i++) {
-            if (arrayStorage[i].includes(project) === true) {        
-                arrayStorage[0].push(task)
-            }
-        }
+            arrayStorage[project].push(task)
         
         updateLocalStorage()
     }

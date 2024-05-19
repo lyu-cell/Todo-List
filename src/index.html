@@ -1,39 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
-</head>
-<body>
+  </head>
+  <body>
     <header></header>
     <div id="content"></div>
     <div class="sidebar"></div>
     <script>
-        function projectBackgroundUi (name) {
-            const content = document.querySelector("#content")
-            if(document.querySelector(".taskDisplay") !== null) {
-                content.removeChild(document.querySelector(".taskDisplay"))
-            }
-            const projectName = document.createElement("div")
-            const taskDisplay = document.createElement("div")
-
-            taskDisplay.classList.add("taskDisplay");
-            projectName.classList.add("projectName");
-
-
-            projectName.textContent = `${name}`
-
-            content.appendChild(taskDisplay)
-            taskDisplay.appendChild(projectName)
+      function projectBackgroundUi(name, index) {
+        const content = document.querySelector("#content");
+        if (document.querySelector(".taskDisplay") !== null) {
+          content.removeChild(document.querySelector(".taskDisplay"));
         }
-        
-        function sendProjectIndex () {
-            const arrayStorage = JSON.parse(localStorage.arrayStorage)
-            projectBackgroundUi(arrayStorage[event.target.dataset.key][0])
+        const taskDisplay = document.createElement("div");
+        const projectName = document.createElement("div");
+        const taskContainer = document.createElement("div");
+
+        taskDisplay.classList.add("taskDisplay");
+        projectName.classList.add("projectName");
+        taskContainer.classList.add("taskContainer");
+
+        projectName.setAttribute("data-key", `${index}`);
+        projectName.textContent = `${name}`;
+
+        content.appendChild(taskDisplay);
+        taskDisplay.appendChild(projectName);
+        taskDisplay.appendChild(taskContainer);
+
+        function taskUI (title, date) {
+          // elements are created here...
+          const taskContainer = document.querySelector(".taskContainer")
+          const taskInfoContainer = document.createElement("div")
+          const checkBoxAndTitleWrapper = document.createElement("div")
+          const detailsToDeleteWrapper = document.createElement("div")
+          const checkBox = document.createElement("input")
+          const taskTitle = document.createElement("div")
+          const taskDetails = document.createElement("button")
+          const taskDate = document.createElement("div")
+          const taskEdit = document.createElement("button")
+          const taskDelete = document.createElement("div")
+
+
+          // classes are assigned here...
+          taskInfoContainer.classList.add("taskInfoContainer")
+          checkBoxAndTitleWrapper.classList.add("checkBoxTitleWrapper")
+          detailsToDeleteWrapper.classList.add("detailsToDeleteWrapper")
+          checkBox.classList.add("taskCheckBox")
+          taskTitle.classList.add("taskTitle")
+          taskDetails.classList.add("taskDetails")
+          taskDate.classList.add("taskDate")
+          taskEdit.classList.add("taskEdit")
+          taskDelete.classList.add("taskDelete")
+
+
+          checkBox.setAttribute("type", "checkbox")
+          taskTitle.textContent = `${title}`
+          taskDetails.textContent = "Details"
+          taskDate.textContent = `${date}`
+          taskEdit.textContent = "Edit"
+          taskDelete.textContent = "Delete"
+
+
+          // elements are appended here...
+          taskContainer.appendChild(taskInfoContainer)
+          taskInfoContainer.appendChild(checkBoxAndTitleWrapper)
+          taskInfoContainer.appendChild(detailsToDeleteWrapper)
+          checkBoxAndTitleWrapper.appendChild(checkBox)
+          checkBoxAndTitleWrapper.appendChild(taskTitle)
+          detailsToDeleteWrapper.appendChild(taskDetails)
+          detailsToDeleteWrapper.appendChild(taskDate)
+          detailsToDeleteWrapper.appendChild(taskEdit)
+          detailsToDeleteWrapper.appendChild(taskDelete)
         }
 
-        
+        const ShowAllTasks = (function() {
+          const arrayStorage = JSON.parse(localStorage.arrayStorage)
+          
+          for (let i = 1; i < arrayStorage[index].length; i++) {
+            let titleStore = arrayStorage[index][i].title
+            let dateStore = arrayStorage[index][i].date
+              taskUI(arrayStorage[index][i].title, arrayStorage[index][i].date)
+          }
+        })()
+      }
+
+      function sendProjectIndex() {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage);
+        projectBackgroundUi(
+          arrayStorage[event.target.dataset.key][0],
+          event.target.dataset.key
+        );
+      }
     </script>
-</body>
+  </body>
 </html>

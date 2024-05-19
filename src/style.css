@@ -73,13 +73,6 @@ header {
     height: 195px;
 }
 
-.taskContainer {
-    display: grid;
-    grid-template-rows: 1fr 5fr;
-    background-color: #f5d0fe;
-    height: auto;
-    width: auto;
-}
 
 .title {
     font-size: xx-large;
@@ -107,7 +100,7 @@ header {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     height: 80px;
-    width: auto;
+    width: 670px;
     background-color: wheat;
 }
 
@@ -202,9 +195,9 @@ dialog::backdrop {
 
 
 .formDisplay {
-    display: flex;
+    display: grid;
+    grid-template-rows: 1fr 4fr;
     border: 1px solid purple;
-    justify-content: start;
     padding-left: 20px;
     padding-top: 8px
 }
@@ -391,3 +384,13 @@ dialog::backdrop {
     background-color: white;
 }
 
+.taskContainer {
+    display: flex;
+    flex-direction: column;
+    grid-row: 2/3;
+    overflow-y: auto;
+    gap: 10px;
+    justify-content: start;
+    align-items: center;
+    height: 450px;
+}
