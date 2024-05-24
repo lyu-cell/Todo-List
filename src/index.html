@@ -12,9 +12,11 @@
     <script>
       function projectBackgroundUi(name, index) {
         const content = document.querySelector("#content");
+
         if (document.querySelector(".taskDisplay") !== null) {
           content.removeChild(document.querySelector(".taskDisplay"));
         }
+
         const taskDisplay = document.createElement("div");
         const projectName = document.createElement("div");
         const taskContainer = document.createElement("div");
@@ -30,61 +32,60 @@
         taskDisplay.appendChild(projectName);
         taskDisplay.appendChild(taskContainer);
 
-        function taskUI (title, date) {
+        function taskUI(title, date, projectIndex, taskIndex) {
           // elements are created here...
-          const taskContainer = document.querySelector(".taskContainer")
-          const taskInfoContainer = document.createElement("div")
-          const checkBoxAndTitleWrapper = document.createElement("div")
-          const detailsToDeleteWrapper = document.createElement("div")
-          const checkBox = document.createElement("input")
-          const taskTitle = document.createElement("div")
-          const taskDetails = document.createElement("button")
-          const taskDate = document.createElement("div")
-          const taskEdit = document.createElement("button")
-          const taskDelete = document.createElement("div")
-
+          const taskContainer = document.querySelector(".taskContainer");
+          const taskInfoContainer = document.createElement("div");
+          const checkBoxAndTitleWrapper = document.createElement("div");
+          const detailsToDeleteWrapper = document.createElement("div");
+          const checkBox = document.createElement("input");
+          const taskTitle = document.createElement("div");
+          const taskDetails = document.createElement("button");
+          const taskDate = document.createElement("div");
+          const taskEdit = document.createElement("button");
+          const taskDelete = document.createElement("div");
 
           // classes are assigned here...
-          taskInfoContainer.classList.add("taskInfoContainer")
-          checkBoxAndTitleWrapper.classList.add("checkBoxTitleWrapper")
-          detailsToDeleteWrapper.classList.add("detailsToDeleteWrapper")
-          checkBox.classList.add("taskCheckBox")
-          taskTitle.classList.add("taskTitle")
-          taskDetails.classList.add("taskDetails")
-          taskDate.classList.add("taskDate")
-          taskEdit.classList.add("taskEdit")
-          taskDelete.classList.add("taskDelete")
+          taskInfoContainer.classList.add("taskInfoContainer");
+          checkBoxAndTitleWrapper.classList.add("checkBoxTitleWrapper");
+          detailsToDeleteWrapper.classList.add("detailsToDeleteWrapper");
+          checkBox.classList.add("taskCheckBox");
+          taskTitle.classList.add("taskTitle");
+          taskDetails.classList.add("taskDetails");
+          taskDate.classList.add("taskDate");
+          taskEdit.classList.add("taskEdit");
+          taskEdit.setAttribute("onclick", "showTaskEditPanel()");
+          taskDelete.classList.add("taskDelete");
 
-
-          checkBox.setAttribute("type", "checkbox")
-          taskTitle.textContent = `${title}`
-          taskDetails.textContent = "Details"
-          taskDate.textContent = `${date}`
-          taskEdit.textContent = "Edit"
-          taskDelete.textContent = "Delete"
-
+          checkBox.setAttribute("type", "checkbox");
+          taskTitle.textContent = `${title}`;
+          taskDetails.textContent = "Details";
+          taskEdit.setAttribute("data-project", `${projectIndex}`)
+          taskEdit.setAttribute("data-task", `${taskIndex}`)
+          taskDate.textContent = `${date}`;
+          taskEdit.textContent = "Edit";
+          taskDelete.textContent = "Delete";
 
           // elements are appended here...
-          taskContainer.appendChild(taskInfoContainer)
-          taskInfoContainer.appendChild(checkBoxAndTitleWrapper)
-          taskInfoContainer.appendChild(detailsToDeleteWrapper)
-          checkBoxAndTitleWrapper.appendChild(checkBox)
-          checkBoxAndTitleWrapper.appendChild(taskTitle)
-          detailsToDeleteWrapper.appendChild(taskDetails)
-          detailsToDeleteWrapper.appendChild(taskDate)
-          detailsToDeleteWrapper.appendChild(taskEdit)
-          detailsToDeleteWrapper.appendChild(taskDelete)
+          taskContainer.appendChild(taskInfoContainer);
+          taskInfoContainer.appendChild(checkBoxAndTitleWrapper);
+          taskInfoContainer.appendChild(detailsToDeleteWrapper);
+          checkBoxAndTitleWrapper.appendChild(checkBox);
+          checkBoxAndTitleWrapper.appendChild(taskTitle);
+          detailsToDeleteWrapper.appendChild(taskDetails);
+          detailsToDeleteWrapper.appendChild(taskDate);
+          detailsToDeleteWrapper.appendChild(taskEdit);
+          detailsToDeleteWrapper.appendChild(taskDelete);
         }
 
-        const ShowAllTasks = (function() {
-          const arrayStorage = JSON.parse(localStorage.arrayStorage)
-          
+        const ShowAllTasks = (function () {
+          const arrayStorage = JSON.parse(localStorage.arrayStorage);
           for (let i = 1; i < arrayStorage[index].length; i++) {
-            let titleStore = arrayStorage[index][i].title
-            let dateStore = arrayStorage[index][i].date
-              taskUI(arrayStorage[index][i].title, arrayStorage[index][i].date)
+            let titleStore = arrayStorage[index][i].title;
+            let dateStore = arrayStorage[index][i].date;
+            taskUI(titleStore, dateStore, index, i);
           }
-        })()
+        })();
       }
 
       function sendProjectIndex() {
@@ -93,6 +94,154 @@
           arrayStorage[event.target.dataset.key][0],
           event.target.dataset.key
         );
+      }
+
+      function editTask() {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage)
+        const projectIndex = event.target.dataset.project
+        const taskIndex = event.target.dataset.task 
+        const editTaskTitle = document.querySelector(".editTaskTitleInput")
+        const editDateInput = document.querySelector("#editDateInput")
+
+
+        arrayStorage[projectIndex][taskIndex].title = editTaskTitle.value
+        arrayStorage[projectIndex][taskIndex].date = editDateInput.value
+        localStorage.arrayStorage = JSON.stringify(arrayStorage)
+
+        document.querySelector(".taskContainer").remove()
+        const taskContainer = document.createElement("div")
+        taskContainer.classList.add("taskContainer")
+        document.querySelector(".taskDisplay").appendChild(taskContainer)
+
+        function taskUI(title, date, projectIndex, taskIndex) {
+          // elements are created here...
+          const taskInfoContainer = document.createElement("div");
+          const checkBoxAndTitleWrapper = document.createElement("div");
+          const detailsToDeleteWrapper = document.createElement("div");
+          const checkBox = document.createElement("input");
+          const taskTitle = document.createElement("div");
+          const taskDetails = document.createElement("button");
+          const taskDate = document.createElement("div");
+          const taskEdit = document.createElement("button");
+          const taskDelete = document.createElement("div");
+
+          // classes are assigned here...
+          taskInfoContainer.classList.add("taskInfoContainer");
+          checkBoxAndTitleWrapper.classList.add("checkBoxTitleWrapper");
+          detailsToDeleteWrapper.classList.add("detailsToDeleteWrapper");
+          checkBox.classList.add("taskCheckBox");
+          taskTitle.classList.add("taskTitle");
+          taskDetails.classList.add("taskDetails");
+          taskDate.classList.add("taskDate");
+          taskEdit.classList.add("taskEdit");
+          taskEdit.setAttribute("onclick", "showTaskEditPanel()");
+          taskDelete.classList.add("taskDelete");
+
+          checkBox.setAttribute("type", "checkbox");
+          taskTitle.textContent = `${title}`;
+          taskDetails.textContent = "Details";
+          taskEdit.setAttribute("data-project", `${projectIndex}`)
+          taskEdit.setAttribute("data-task", `${taskIndex}`)
+          taskDate.textContent = `${date}`;
+          taskEdit.textContent = "Edit";
+          taskDelete.textContent = "Delete";
+
+          // elements are appended here...
+          taskContainer.appendChild(taskInfoContainer);
+          taskInfoContainer.appendChild(checkBoxAndTitleWrapper);
+          taskInfoContainer.appendChild(detailsToDeleteWrapper);
+          checkBoxAndTitleWrapper.appendChild(checkBox);
+          checkBoxAndTitleWrapper.appendChild(taskTitle);
+          detailsToDeleteWrapper.appendChild(taskDetails);
+          detailsToDeleteWrapper.appendChild(taskDate);
+          detailsToDeleteWrapper.appendChild(taskEdit);
+          detailsToDeleteWrapper.appendChild(taskDelete);
+        }
+
+        const ShowAllTasks = (function () {
+          const arrayStorage = JSON.parse(localStorage.arrayStorage);
+          for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
+            let titleStore = arrayStorage[projectIndex][i].title;
+            let dateStore = arrayStorage[projectIndex][i].date;
+            taskUI(titleStore, dateStore, projectIndex, i);
+          }
+        })();
+      }
+
+      function showTaskEditPanel() {
+        if(document.querySelector(".editPanelDialog") !== null) {
+          document.querySelector(".editPanelDialog").remove()
+        }
+        const content = document.querySelector("#content");
+        const dialog = document.createElement("dialog");
+        const editPanelContainer = document.createElement("div");
+        const editPanelHeader = document.createElement("div");
+        const formInputContainer = document.createElement("div");
+        const taskTitleInput = document.createElement("input");
+        const descriptionInput = document.createElement("input");
+        const dateInputContainer = document.createElement("div");
+        const dateInput = document.createElement("input");
+        const dateInputLabel = document.createElement("label");
+        const confirmEditBtn = document.createElement("button")
+        const arrayStorage = JSON.parse(localStorage.arrayStorage)
+        let title = arrayStorage[event.target.dataset.project][event.target.dataset.task].title
+        let date = arrayStorage[event.target.dataset.project][event.target.dataset.task].date
+
+        dialog.classList.add("editPanelDialog")
+        editPanelContainer.classList.add(".editContainer");
+        formInputContainer.classList.add(".formInputContainer");
+        taskTitleInput.classList.add("editTaskTitleInput");
+        descriptionInput.classList.add("editDetailsInput");
+        dateInput.setAttribute("id", "editDateInput");
+        dateInput.setAttribute("type", "date");
+        dateInputLabel.setAttribute("for", "editDateInput");
+        editPanelHeader.classList.add("editPanelHeader")
+        confirmEditBtn.classList.add("ConfirmEditBtn")
+
+        dateInputLabel.textContent = "Date: "
+        editPanelHeader.textContent = "Edit task here..."
+        confirmEditBtn.textContent = "Confirm Edit"
+
+        taskTitleInput.value = `${title}`
+        dateInput.value = `${date }`
+        confirmEditBtn.setAttribute("data-project", `${event.target.dataset.project}`)
+        confirmEditBtn.setAttribute("data-task", `${event.target.dataset.task}`)
+        confirmEditBtn.setAttribute("onclick", "editTask()")
+
+        content.appendChild(dialog);
+        dialog.appendChild(editPanelContainer);
+        editPanelContainer.appendChild(editPanelHeader)
+        editPanelContainer.appendChild(formInputContainer);
+        editPanelContainer.appendChild(confirmEditBtn)
+        formInputContainer.appendChild(taskTitleInput);
+        formInputContainer.appendChild(descriptionInput);
+        formInputContainer.appendChild(dateInputContainer)
+        dateInputContainer.appendChild(dateInputLabel)
+        dateInputContainer.appendChild(dateInput);
+        
+        dialog.showModal();
+
+        /*styles here... it seems that the elements within the dialog element can't be styled
+         using external css files and have to be styles where it was create "i.e" inside script tag.*/
+        editPanelContainer.style.cssText =
+          "display: flex; height: 300px; width: 400px; flex-direction: column; gap: 10px";
+
+        editPanelHeader.style.cssText = "display: flex; align-items: center; padding-left: 15px; font-style: italic; font-weight: 600; font-size: large; \
+          height: 50px;"
+
+        formInputContainer.style.cssText = "display: flex; height: 150px; width 200px; padding-left: 20px; \
+          adding-top: 25px; flex-direction: column; gap: 20px;"
+        
+        confirmEditBtn.style.cssText = "width: 100px; align-self: center; justify-self: center; margin-top: 10px"
+
+        taskTitleInput.style.cssText = "width: 200px; height: 20px;"
+        descriptionInput.style.cssText = "width: 200px; height: 20px;"
+        dateInput.style.cssText = "width: 164px; height: 20px;"
+
+        confirmEditBtn.addEventListener("click", (e) => {
+          e.preventDefault()
+          dialog.close()
+        })
       }
     </script>
   </body>

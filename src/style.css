@@ -389,8 +389,9 @@ dialog::backdrop {
     flex-direction: column;
     grid-row: 2/3;
     overflow-y: auto;
-    gap: 10px;
+    gap: 20px;
     justify-content: start;
     align-items: center;
     height: 450px;
 }
+
