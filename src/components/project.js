@@ -14,9 +14,12 @@ const project = (function() {
 
 
     const appendTask = (project, task) => {
-            arrayStorage[project].push(task)
+        const arrayStorage = JSON.parse(localStorage.arrayStorage)
+        arrayStorage[project].push(task)
         
-        updateLocalStorage()
+        if (arrayStorage.length !== 0) {
+            localStorage.arrayStorage = JSON.stringify(arrayStorage)
+        }
     }
 
     const initializeStorage = (() => {

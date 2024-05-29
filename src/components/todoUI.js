@@ -253,7 +253,7 @@ const displayProjectContents = (function () {
           project.initializeProject(`${generate.element.nameInput.value}`);
           makeAndAppendProjectUI();
           // here it should be "projectInput" rather then then "projectInputLabel" as this is a input field, change it
-          document.querySelector("#projectInputLabel").value = ""
+          document.querySelector("#projectInputLabel").value = "";
         }
         generate.element.dialog.close();
       });
@@ -336,8 +336,8 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
     );
     generate.element.dialog.close();
   }
-  taskTitle.value = ""
-  dateInput.value = ""
+  taskTitle.value = "";
+  dateInput.value = "";
 });
 
 function taskUI(title, date, projectIndex, taskIndex) {
@@ -365,13 +365,16 @@ function taskUI(title, date, projectIndex, taskIndex) {
   taskDelete.classList.add("taskDelete");
 
   checkBox.setAttribute("type", "checkbox");
-  taskEdit.setAttribute("data-project", `${projectIndex}`)
-  taskEdit.setAttribute("data-task", `${taskIndex}`)
+  taskEdit.setAttribute("data-project", `${projectIndex}`);
+  taskEdit.setAttribute("data-task", `${taskIndex}`);
+  taskDelete.setAttribute("data-project", `${projectIndex}`);
+  taskDelete.setAttribute("data-task", `${taskIndex}`);
+  taskDelete.setAttribute("onclick", "deleteTask()");
   taskTitle.textContent = `${title}`;
   taskDetails.textContent = "Details";
   taskDate.textContent = `${date}`;
   taskEdit.textContent = "Edit";
-  taskEdit.setAttribute("onclick", "showTaskEditPanel()")
+  taskEdit.setAttribute("onclick", "showTaskEditPanel()");
   taskDelete.textContent = "Delete";
 
   // elements are appended here...
@@ -392,14 +395,10 @@ const ShowAllTasks = function () {
   for (let i = 1; i < arrayStorage[0].length; i++) {
     let titleStore = arrayStorage[0][i].title;
     let dateStore = arrayStorage[0][i].date;
-    let index = arrayStorage[0][i].index;
-    taskUI(titleStore, dateStore, 0, index);
+    taskUI(titleStore, dateStore, 0, i);
   }
 };
 
-
 ShowAllTasks();
-
-
 
 export { generate, appendAllProjectFromLocal };
