@@ -6,6 +6,6 @@ import { generate, appendAllProjectFromLocal } from "./components/todoUI"
 
 appendAllProjectFromLocal()
 
-project.showLatestArray()
+
 
 

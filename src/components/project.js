@@ -1,49 +1,42 @@
 const project = (function() {
-    let arrayStorage = []
-    
+    const sendItems = (function() {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage)
 
+        const storeProject = (project) => {
+            arrayStorage.push(project)
+            localStorage.arrayStorage = JSON.stringify(arrayStorage)
+        }
+
+        const storeTask = (projectIndex, task) => {
+            arrayStorage[projectIndex].push(task)
+            localStorage.arrayStorage = JSON.stringify(arrayStorage)
+        }
+        
+        const arrayStorageStats = () => {
+            return arrayStorage.length
+        }
+        return {storeProject, storeTask, arrayStorageStats}
+    })
     
     const initializeProject = (projectName) => {
-        arrayStorage.push([`#${projectName}`])
-        updateLocalStorage()       
+        sendItems().storeProject([`#${projectName}`])
     }
-
-    const showLatestArray = () => {
-        console.log(arrayStorage)
-    }
-
 
     const appendTask = (project, task) => {
-        const arrayStorage = JSON.parse(localStorage.arrayStorage)
-        arrayStorage[project].push(task)
-        
-        if (arrayStorage.length !== 0) {
-            localStorage.arrayStorage = JSON.stringify(arrayStorage)
+        if (sendItems().arrayStorageStats() !== 0) {
+            sendItems().storeTask(project, task)
         }
     }
 
     const initializeStorage = (() => {
-        
         const appendDefault = (() => {
-            if (localStorage.arrayStorage === "" && arrayStorage.length === 0) {
-                arrayStorage.push(["#Home"])
-            }
-        })()
-
-    const initializeFromLocalStorage = (() => {
-            if (localStorage.arrayStorage !== "" && arrayStorage.length === 0) {
-                arrayStorage = JSON.parse(localStorage.arrayStorage)
+            if (localStorage.arrayStorage === "" && sendItems().arrayStorageStats() === 0) {
+                sendItems().storeProject(["#Home"])
             }
         })()
     })()
     
-    const updateLocalStorage = () => {
-        if (arrayStorage.length !== 0) {
-            localStorage.arrayStorage = JSON.stringify(arrayStorage)
-        }
-    }
-    updateLocalStorage()
-    return {initializeProject, showLatestArray, appendTask, arrayStorage, updateLocalStorage}
+    return {initializeProject, appendTask}
 })()
 
 export {project}
