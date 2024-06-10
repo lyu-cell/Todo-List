@@ -349,11 +349,14 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
       arrayStorage[Number(projectIndex)].length,
       projectIndex
     );
+    console.log(arrayStorage[Number(projectIndex)].length)
+    
     taskUI(
       taskTitle.value,
       dateInput.value,
+      "ongoing",
       projectIndex,
-      arrayStorage[Number(projectIndex)].length
+      arrayStorage[Number(projectIndex)].length,
     );
     generate.element.dialog.close();
   }
@@ -414,7 +417,6 @@ function taskUI(title, date, status, projectIndex, taskIndex) {
   detailsToDeleteWrapper.appendChild(taskDate);
   detailsToDeleteWrapper.appendChild(taskEdit);
   detailsToDeleteWrapper.appendChild(taskDelete);
-  console.log(`project: ${projectIndex} Task: ${taskIndex}`)
   if(status !== "complete") {
     checkBox.checked = false
   } else if (status === "complete") {

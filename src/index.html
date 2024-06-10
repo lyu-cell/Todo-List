@@ -491,8 +491,9 @@
         const taskTitle = arrayStorage[projectIndex][taskIndex].title;
         const taskDate = arrayStorage[projectIndex][taskIndex].date;
         const status = arrayStorage[projectIndex][taskIndex].status
-        const taskDescription =
-          arrayStorage[projectIndex][taskIndex].description;
+        const taskDescription = arrayStorage[projectIndex][taskIndex].description;
+        console.log(arrayStorage[projectIndex][taskIndex].priority)
+        const priority = arrayStorage[projectIndex][taskIndex].priority
 
         function showDetails() {
           const content = document.querySelector("#content");
@@ -522,7 +523,7 @@
           closeBtn.textContent = "Close";
           priorityLabel.textContent = "priority: ";
           priorityInput.style.cssText = "color: white;";
-          priorityInput.textContent = `${priority}`;
+          priorityInput.textContent = `${priority}`
 
           content.appendChild(dialog);
           dialog.appendChild(taskDetailsContainer);
