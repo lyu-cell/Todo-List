@@ -35,11 +35,10 @@
         taskEdit.setAttribute("onclick", "showTaskEditPanel()");
         taskDelete.classList.add("taskDelete");
 
-
         checkBox.setAttribute("type", "checkbox");
-        checkBox.setAttribute("onclick", "changeStatus()")
-        checkBox.setAttribute("data-project", `${projectIndex}`)
-        checkBox.setAttribute("data-task", `${taskIndex}`)
+        checkBox.setAttribute("onclick", "changeStatus()");
+        checkBox.setAttribute("data-project", `${projectIndex}`);
+        checkBox.setAttribute("data-task", `${taskIndex}`);
         taskTitle.textContent = `${title}`;
         taskDetails.textContent = "Details";
         taskDetails.setAttribute("data-task", `${taskIndex}`);
@@ -54,11 +53,6 @@
         taskEdit.textContent = "Edit";
         taskDelete.textContent = "Delete";
 
-        console.log(`
-        title: ${title}
-        date: ${date}
-        status: ${status}`)
-
         // elements are appended here...
         taskContainer.appendChild(taskInfoContainer);
         taskInfoContainer.appendChild(checkBoxAndTitleWrapper);
@@ -69,13 +63,12 @@
         detailsToDeleteWrapper.appendChild(taskDate);
         detailsToDeleteWrapper.appendChild(taskEdit);
         detailsToDeleteWrapper.appendChild(taskDelete);
-        if(status !== "complete") {
-          checkBox.checked = false
+        if (status !== "complete") {
+          checkBox.checked = false;
         } else if (status === "complete") {
-          checkBox.checked = true
+          checkBox.checked = true;
         }
       }
-      
 
       function projectBackgroundUi(name, projectIndex) {
         const content = document.querySelector("#content");
@@ -104,7 +97,7 @@
           for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
             let titleStore = arrayStorage[projectIndex][i].title;
             let dateStore = arrayStorage[projectIndex][i].date;
-            let status = arrayStorage[projectIndex][i].status
+            let status = arrayStorage[projectIndex][i].status;
             taskUI(titleStore, dateStore, status, projectIndex, i);
           }
         })();
@@ -184,7 +177,7 @@
           for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
             let titleStore = arrayStorage[projectIndex][i].title;
             let dateStore = arrayStorage[projectIndex][i].date;
-            let status = arrayStorage[projectIndex][i].status
+            let status = arrayStorage[projectIndex][i].status;
             taskUI(titleStore, dateStore, status, projectIndex, i);
           }
         })();
@@ -225,6 +218,7 @@
         formInputContainer.classList.add(".formInputContainer");
         taskTitleInput.classList.add("editTaskTitleInput");
         descriptionInput.classList.add("editDetailsInput");
+        priorityInputContainer.classList.add("priorityInputDetailsContainer")
         low.classList.add("priorityLowDetails");
         high.classList.add("priorityHighDetails");
         extreme.classList.add("priorityExtremeDetails");
@@ -294,53 +288,45 @@
 
         function changePriorityOnClick() {
           low.addEventListener("click", () => {
-            if (priority === "Extreme") {
-              extreme.style.cssText =
-                "border: 1px solid purple; color: purple; background-color: black;";
-            } else if (priority === "High") {
-              high.style.cssText =
-                "border: 1px solid blue; color: blue; background-color: black;";
-            }
+            high.style.cssText = "background-color: white; color: blue"
+            extreme.style.cssText = "background-color: white; color: purple;"
+            
             low.style.cssText = "background-color: green; color: white;";
-            priority = "Low";
           });
+
           high.addEventListener("click", () => {
-            if (priority === "Extreme") {
-              extreme.style.cssText =
-                "border: 1px solid purple; color: purple; background-color: black;";
-            } else if (priority === "Low") {
-              low.style.cssText =
-                "border: 1px solid green; color: green; background-color: black;";
-            }
+            low.style.cssText = "background-color: white; color: green;"
+            extreme.style.cssText = "background-color: white; color: purple;"
+
             high.style.cssText = "background-color: blue; color: white;";
-            priority = "High";
           });
+          
           extreme.addEventListener("click", () => {
-            if (priority === "High") {
-              high.style.cssText =
-                "border: 1px solid blue; color: blue; background-color: black;";
-            }
-            if (priority === "Low") {
-              low.style.cssText =
-                "border: 1px solid green; color: green; background-color: black;";
-            }
+            low.style.cssText = "background-color: white; color: green"
+            high.style.cssText = "background-color: white; color: blue"
+
             extreme.style.cssText = "background-color: purple; color: white;";
-            priority = "Extreme";
           });
         }
 
-        document.querySelector(".priorityLowDetails").addEventListener("click", () => {
-          arrayStorage[projectIndex][taskIndex].priority = "Low"
-          localStorage.arrayStorage = JSON.stringify(arrayStorage)
-        })
-        document.querySelector(".priorityHighDetails").addEventListener("click", () => {
-          arrayStorage[projectIndex][taskIndex].priority = "High"
-          localStorage.arrayStorage = JSON.stringify(arrayStorage)
-        })
-        document.querySelector(".priorityExtremeDetails").addEventListener("click", () => {
-          arrayStorage[projectIndex][taskIndex].priority = "Extreme"
-          localStorage.arrayStorage = JSON.stringify(arrayStorage)
-        })
+        document
+          .querySelector(".priorityLowDetails")
+          .addEventListener("click", () => {
+            arrayStorage[projectIndex][taskIndex].priority = "Low";
+            localStorage.arrayStorage = JSON.stringify(arrayStorage);
+          });
+        document
+          .querySelector(".priorityHighDetails")
+          .addEventListener("click", () => {
+            arrayStorage[projectIndex][taskIndex].priority = "High";
+            localStorage.arrayStorage = JSON.stringify(arrayStorage);
+          });
+        document
+          .querySelector(".priorityExtremeDetails")
+          .addEventListener("click", () => {
+            arrayStorage[projectIndex][taskIndex].priority = "Extreme";
+            localStorage.arrayStorage = JSON.stringify(arrayStorage);
+          });
 
         changePriorityOnClick();
 
@@ -469,7 +455,6 @@
       function deleteProject() {
         let arrayStorage = JSON.parse(localStorage.arrayStorage);
         let projectIndex = Number(event.target.dataset.project);
-        console.log(projectIndex);
 
         if (projectIndex !== 0) {
           arrayStorage.splice(Number(event.target.dataset.project), 1);
@@ -490,10 +475,10 @@
         let projectIndex = event.target.dataset.project;
         const taskTitle = arrayStorage[projectIndex][taskIndex].title;
         const taskDate = arrayStorage[projectIndex][taskIndex].date;
-        const status = arrayStorage[projectIndex][taskIndex].status
-        const taskDescription = arrayStorage[projectIndex][taskIndex].description;
-        console.log(arrayStorage[projectIndex][taskIndex].priority)
-        const priority = arrayStorage[projectIndex][taskIndex].priority
+        const status = arrayStorage[projectIndex][taskIndex].status;
+        const taskDescription =
+          arrayStorage[projectIndex][taskIndex].description;
+        const priority = arrayStorage[projectIndex][taskIndex].priority;
 
         function showDetails() {
           const content = document.querySelector("#content");
@@ -523,7 +508,7 @@
           closeBtn.textContent = "Close";
           priorityLabel.textContent = "priority: ";
           priorityInput.style.cssText = "color: white;";
-          priorityInput.textContent = `${priority}`
+          priorityInput.textContent = `${priority}`;
 
           content.appendChild(dialog);
           dialog.appendChild(taskDetailsContainer);
@@ -550,31 +535,32 @@
       }
 
       function changeStatus() {
-        let projectIndex = event.target.dataset.project
-        let taskIndex = event.target.dataset.task
-        let arrayStorage = JSON.parse(localStorage.arrayStorage)
-        let status = arrayStorage[event.target.dataset.project][event.target.dataset.task]
+        let projectIndex = event.target.dataset.project;
+        let taskIndex = event.target.dataset.task;
+        let arrayStorage = JSON.parse(localStorage.arrayStorage);
+        let status =
+          arrayStorage[event.target.dataset.project][event.target.dataset.task];
 
         if (status.status !== "complete") {
-          arrayStorage[projectIndex][taskIndex].status = "complete"
-          localStorage.arrayStorage = JSON.stringify(arrayStorage)   
+          arrayStorage[projectIndex][taskIndex].status = "complete";
+          localStorage.arrayStorage = JSON.stringify(arrayStorage);
         } else if (status.status === "complete") {
-          arrayStorage[projectIndex][taskIndex].status = "ongoing"
-          localStorage.arrayStorage = JSON.stringify(arrayStorage)
+          arrayStorage[projectIndex][taskIndex].status = "ongoing";
+          localStorage.arrayStorage = JSON.stringify(arrayStorage);
         }
 
-        document.querySelector(".taskContainer").remove()
-        let taskContainer = document.createElement("div")
-        taskContainer.classList.add("taskContainer")
-        document.querySelector(".taskDisplay").appendChild(taskContainer)
-        for(let i = 1; i < arrayStorage[projectIndex].length; i++) {
+        document.querySelector(".taskContainer").remove();
+        let taskContainer = document.createElement("div");
+        taskContainer.classList.add("taskContainer");
+        document.querySelector(".taskDisplay").appendChild(taskContainer);
+        for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
           taskUI(
             arrayStorage[projectIndex][i].title,
             arrayStorage[projectIndex][i].date,
             arrayStorage[projectIndex][i].status,
             projectIndex,
             i
-          )
+          );
         }
       }
     </script>

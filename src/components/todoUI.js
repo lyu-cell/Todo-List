@@ -32,10 +32,12 @@ const generate = (function () {
     const priorityExtreme = document.createElement("div");
     const taskSubmitBtnContainer = document.createElement("div");
     const taskFormSUbmitBtn = document.createElement("button");
+    const formDialog = document.createElement("dialog")
 
     return {
       projectBtn,
       logo,
+      formDialog,
       projectContainer,
       dialog,
       projectInputLabel,
@@ -81,7 +83,7 @@ const generate = (function () {
     element.projectFormText.classList.add("projectFormText");
     element.projectFormContainer.classList.add("projectFormContainer");
     element.taskTitle.classList.add("taskTitleInput");
-    element.taskDetails.classList.add("taskDetails");
+    element.taskDetails.classList.add("inputTaskDetails");
     element.dateLabel.classList.add("dateLabel");
     element.priorityLabel.classList.add("priorityLabel");
     element.priorityOptionContainer.classList.add("priorityOptionContainer");
@@ -90,6 +92,7 @@ const generate = (function () {
     element.priorityExtreme.classList.add("priorityExtreme");
     element.taskFormSUbmitBtn.classList.add("taskFormSubmitBtn");
     element.taskSubmitBtnContainer.classList.add("taskSubmitBtnContainer");
+    element.formDialog.classList.add("formDialog")
   })();
 
   const addText = (function () {
@@ -119,7 +122,7 @@ const getElement = (function () {
 
 const header = (function () {
   const createLogo = (function () {
-    generate.element.logo.textContent = "Lyu Todo List";
+    generate.element.logo.textContent = "Lyu-Todo List";
     getElement.header.appendChild(generate.element.logo);
   })();
 })();
@@ -137,10 +140,11 @@ const sideBarUi = (function () {
   const formMaker = (function () {
     generate.element.submitBtn.textContent = "Submit";
     generate.element.nameInput.setAttribute("id", "projectInputLabel");
+    generate.element.nameInput.setAttribute("maxlength", "15")
     generate.element.projectInputLabel.setAttribute("for", "projectInputLabel");
     generate.element.projectInputLabel.textContent = "Name: ";
-    getElement.content.appendChild(generate.element.dialog);
-    generate.element.dialog.appendChild(generate.element.mainFormContainer);
+    getElement.content.appendChild(generate.element.formDialog);
+    generate.element.formDialog.appendChild(generate.element.mainFormContainer);
     generate.element.mainFormContainer.appendChild(generate.element.formHeader);
     generate.element.mainFormContainer.appendChild(
       generate.element.formWrapper
@@ -166,9 +170,10 @@ const sideBarUi = (function () {
     const taskForm = document.createElement("form");
     taskForm.classList.add("taskForm");
 
-    generate.element.taskTitle.setAttribute("maxlength", "40");
+    generate.element.taskTitle.setAttribute("maxlength", "20");
     generate.element.dateInput.setAttribute("type", "date");
     generate.element.dateInput.setAttribute("id", "date");
+    generate.element.taskDetails.setAttribute("maxlength", "50")
 
     generate.element.taskTitle.setAttribute(
       "placeHolder",
@@ -203,7 +208,7 @@ const sideBarUi = (function () {
 
   const eventListeners = (function () {
     document.querySelector(".createBtn").addEventListener("click", () => {
-      generate.element.dialog.showModal();
+      generate.element.formDialog.showModal();
     });
 
     addTaskForm();
@@ -294,7 +299,7 @@ const displayProjectContents = (function () {
           appendAllProjectFromLocal();
           document.querySelector("#projectInputLabel").value = "";
         }
-        generate.element.dialog.close();
+        generate.element.formDialog.close();
       });
     })();
   })();
@@ -324,9 +329,6 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
   const deleteInfoContainer = document.querySelector(".deleteInfoContainer");
   const currentProject = document.querySelector(".projectName");
   const arrayStorage = JSON.parse(localStorage.arrayStorage);
-  const low = document.querySelector(".priorityLow");
-  const high = document.querySelector(".priorityHigh");
-  const extreme = document.querySelector(".priorityExtreme");
 
   if (deleteInfoContainer !== null) {
     document.querySelector(".taskContainer").remove();
@@ -337,9 +339,11 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
 
   const taskTitle = generate.element.taskTitle;
   const dateInput = generate.element.dateInput;
-  const description = document.querySelector(".taskDetails");
+  const description = document.querySelector(".inputTaskDetails");
 
-  if (taskTitle.value !== "" && dateInput.value !== "") {
+  if(taskTitle.value === "" || dateInput.value === '' || priorityStore === "") return alert("FIll the title, date & priority filed")
+
+  if (taskTitle.value !== "" && dateInput.value !== "" && priorityStore !== "") {
     let projectIndex = currentProject.dataset.key;
     task.sendTask(
       taskTitle.value,
@@ -349,7 +353,6 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
       arrayStorage[Number(projectIndex)].length,
       projectIndex
     );
-    console.log(arrayStorage[Number(projectIndex)].length)
     
     taskUI(
       taskTitle.value,
@@ -358,11 +361,13 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
       projectIndex,
       arrayStorage[Number(projectIndex)].length,
     );
-    generate.element.dialog.close();
+    generate.element.formDialog.close();
+
+    taskTitle.value = "";
+    dateInput.value = "";
+    description.value = ""
   }
-  taskTitle.value = "";
-  dateInput.value = "";
-});
+  });
 
 function taskUI(title, date, status, projectIndex, taskIndex) {
   // elements are created here...
@@ -438,62 +443,44 @@ const ShowAllTasks = function () {
 
 let priorityStore = "";
 
-const priorityContainer = (function () {
-  document.querySelector(".priorityLow").addEventListener("click", () => {
-    priorityStore = document.querySelector(".priorityLow").textContent;
-  });
-  ("Low");
-  document.querySelector(".priorityHigh").addEventListener("click", () => {
-    priorityStore = document.querySelector(".priorityHigh").textContent;
-  });
 
-  document.querySelector(".priorityExtreme").addEventListener("click", () => {
-    priorityStore = document.querySelector(".priorityExtreme").textContent;
-  });
-})();
+ShowAllTasks();
 
-function checkAndStyleClickedPriority() {
-  let b = "";
-  let previousColor = "";
+function taskFormPriorityColorChange() {
+  let low = document.querySelector(".priorityLow")
+  let high = document.querySelector(".priorityHigh")
+  let extreme = document.querySelector(".priorityExtreme")
 
-  function checkPreviusclicks(priorityClass, color) {
-    if (priorityClass !== b || priorityClass === "") {
-      if (priorityClass !== b && b !== "") {
-        document.querySelector(
-          `${b}`
-        ).style.cssText = `border: 1px solid ${previousColor}; color: ${previousColor}`;
-      }
-      b = priorityClass;
-      previousColor = color;
-      document.querySelector(
-        `${priorityClass}`
-      ).style.cssText = `background-color: ${color}; color: white;`;
-    }
-  }
-  document.querySelector(".priorityLow").addEventListener("click", () => {
-    checkPreviusclicks(".priorityLow", "green");
-  });
 
-  document.querySelector(".priorityHigh").addEventListener("click", () => {
-    checkPreviusclicks(".priorityHigh", "blue");
-  });
+  low.addEventListener("click", () => {
+    low.style.cssText = "background-color: green; color: white;"
+    high.style.cssText = "background-color: white; color: blue;"
+    extreme.style.cssText = "background-color: white; color: purple;"
+    priorityStore = "Low"
+  })
 
-  document.querySelector(".priorityExtreme").addEventListener("click", () => {
-    checkPreviusclicks(".priorityExtreme", "purple");
-  });
-}
+  high.addEventListener("click", () => {
+    high.style.cssText = "background-color: blue; color: white;"
+    low.style.cssText = "background-color: white; color: green;"
+    extreme.style.cssText = "background-color: white; color: purple;"
+    priorityStore = "High"
+  })
 
-function updatePriorityOnclick() {
-  let arrayStorage = JSON.parse(localStorage.arrayStorage)
-  let projectIndex = document.querySelector(".confirmEditBtn").dataset.project
-  let taskIndex = document.querySelector(".confirmEditBtn").dataset.task
+  extreme.addEventListener("click", () => {
+    extreme.style.cssText = "background-color: purple; color: white;"
+    low.style.cssText = "background-color: white; color: green;"
+    high.style.cssText = "background-color: white; color: blue;"
+    priorityStore = "Extreme"
+  })
 
-  document.querySelector(".priorityLowDetails").addEventListener("click", () => {
-    console.log(projectIndex, taskIndex)
+  document.querySelector(".createBtn").addEventListener("click", () => {
+    low.style.cssText = "color: green; background: white;"
+    high.style.cssText = "color: blue; background: white;"
+    extreme.style.cssText = "color: purple; background: white;"
   })
 }
 
-ShowAllTasks();
+taskFormPriorityColorChange()
 
 export { generate, appendAllProjectFromLocal };
 

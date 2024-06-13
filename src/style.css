@@ -1,9 +1,8 @@
 body{
     display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-template-rows: 1fr 5fr;
-    height: 100vh;
-    width: 100vw;
+    grid-template-rows: 2fr 4fr;
+    height: 90vh;
+    width: 80vw;
     background-color: black;
     padding: 0;
     margin: 0;
@@ -13,25 +12,26 @@ header {
     display: flex;
     grid-column: 1/3;
     grid-row: 1/2;
-    height: auto;
-    height: auto;
-    background-color: green;
+    height: 100px;
+    background-color: #8b5cf6;
     color: white;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    padding-left: 70px;
+    font-style: italic;
 }
 
 .logo {
-    font-size: xx-large;
+    font-size: 250%;
     font-weight: 900;
 }
 
 .sidebar {
     display: grid;
-    grid-template-rows: 1fr .2fr;
+    grid-template-rows: .7fr .2fr;
     grid-column: 1/2;
     grid-row: 2/3;
-    background-color: rgb(7, 3, 106);
+    background-color: #7c3aed;
     height: auto;
     width: auto;
     color: white;
@@ -43,7 +43,7 @@ header {
     display: grid;
     grid-column: 2/3;
     grid-row: 2/3;
-    background-color: rgb(22, 90, 90);
+    height: auto;
 }
 
 .createBtn {
@@ -83,7 +83,7 @@ header {
 .taskDisplay{
     display: flex;
     flex-direction: column;
-    height: 505px;
+    height: 484px;
     width: 760px;
     padding-left: 30px;
     padding-right: 30px;
@@ -92,16 +92,18 @@ header {
     padding-bottom: 15px;
     grid-row: 2/3;
     overflow: auto;
-    background-color: #c084fc;
-    border: 1px solid white;
+    background-color: #a78bfa;
 }
 
 .taskInfoContainer {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1fr 1fr;
     height: 80px;
-    width: 670px;
-    background-color: wheat;
+    width: 735px;
+    color: #5b21b6;
+    font-size: large;
+    font-style: italic;
+    background-color: #d8b4fe;
 }
 
 .taskInfoContainer:hover {
@@ -112,7 +114,7 @@ header {
     grid-column: 1/2;
     height: 20px;
     width: 20px;
-    accent-color: grey;
+    accent-color: #8b5cf6;
 }
 
 .checkBoxTitleWrapper {
@@ -123,39 +125,10 @@ header {
     align-items: center;
 }
 
-.detailsToDeleteWrapper {
-    grid-column: 2/3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-}
 
-
-.taskEdit {
-    height: 30px;
-    width: 45px;
-    background-color: wheat;
-    cursor: pointer;
-}
-
-.taskDelete {
-    display: flex;
-    cursor: pointer;
-    height: 30px;
-    width: 50px;
-    justify-content: center;
-    align-items: center;
-
-}
-
-.taskDelete:hover {
-    border: 1px solid black;
-}
-
-dialog {
+.editPanelDialog {
     padding: 0;
-    background-color: black;
+    background-color: #818cf8;
     color: white;
     border: 1px solid purple;
 }
@@ -163,43 +136,6 @@ dialog {
 dialog::backdrop {
     background-color: black;
     opacity: .8;
-}
-
-
-.mainFormContainer {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    grid-template-rows: 1fr 5fr;
-    height: 350px;
-    width: 500px;
-    border: 1px solid purple;
-}
-
-.formHeader {
-    grid-column: 1/3;
-    grid-row: 1/2;
-    align-self: center;
-    font-size: larger;
-    font-weight: 800;
-    padding-left: 20px;
-}
-
-.formWrapper {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid purple;
-    align-items: center;
-    gap: 10px;
-    padding-top: 20px;
-}
-
-
-.formDisplay {
-    display: grid;
-    grid-template-rows: 1fr 4fr;
-    border: 1px solid purple;
-    padding-left: 20px;
-    padding-top: 8px
 }
 
 #projectInputLabel {
@@ -226,7 +162,7 @@ dialog::backdrop {
 
 .taskFormText:hover,
 .projectFormText:hover {
-    background-color: purple;
+    background-color: #5b21b6;
     color: white;
 }
 
@@ -241,94 +177,76 @@ dialog::backdrop {
     font-style: italic;
 }
 
-.taskForm {
+
+.detailsToDeleteWrapper {
     display: grid;
-    flex-direction: column;
-    grid-template-rows: 1fr 1fr 3fr 1.5fr 1.2fr;
-    grid-template-columns: 1fr 3fr;
-    width: 100%;
-    padding-right: 40px;
-}
-
-
-.dateLabel {
-    grid-row: 3/4;
-    grid-column: 1/2;
-    align-self: end;
-    font-size: large;
-    margin-bottom: 2px;
-}
-
-#date {
-    height: 20px;
-    width: 150px;
-    margin-left: 10px;
-    align-self: end;
-    grid-row: 3/4;
+    grid-template-columns: repeat(4, 1fr);
     grid-column: 2/3;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
-.taskTitleInput {
-    height: 25px;
-    grid-row: 1/2;
-    grid-column: 1/3;
+
+.taskEdit {
+    height: 26px;
+    background-color: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+.taskDelete {
+    display: flex;
+    cursor: pointer;
+    height: 26px;
+    width: 70px;
+    font-size: 15px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    color: black;
 }
 
 .taskDetails {
-    height: 25px;
-    grid-row: 2/3;
-    grid-column: 1/3;
+    height: 26px;
+    color: black;
+    border: none;
+    background-color: white;
 }
 
-.priorityLabel {
-    align-self: flex-end;
-    font-size: large;
-    margin-bottom: 15px;
+.taskEdit:hover {
+    background-color: #5b21b6;
+    color: white;
 }
 
-.priorityOptionContainer {
-    display: flex;
-    height: 40px;
-    align-self: flex-end;
-    justify-content: space-evenly;
-    align-items: end;
-    padding-bottom: 15px;
+.taskDetails:hover {
+    background-color: #5b21b6;
+    color: white;
 }
 
-.priorityLow, 
-.priorityHigh,
-.priorityExtreme,
-.priorityExtremeDetails,
-.priorityHighDetails,
-.priorityLowDetails {
-    display: flex;
-    height: 20px;
-    width: 60px;
-    justify-content: center;
-    align-items: center;
-    font-size: small;
-    cursor: pointer;
+
+.taskDelete:hover {
+    background-color: #5b21b6;
+    color: white;
 }
+
+.taskTitle {
+    color: white;
+}
+
+.taskDate {
+    font-size: 16px;
+    color: white;
+    font-weight: 700;
+}
+
 
 .taskSubmitBtnContainer {
     display: flex;
     grid-column: 1/3;
     justify-content: center;
     align-items: center;
-}
-
-.taskFormSubmitBtn {
-    height: 28px;
-    width: 100px;
-    color: #8b5cf6;
-    border: 1px solid #8b5cf6;
-    font-weight: 800;
-    padding-bottom: 5px;
-}
-
-.taskFormSubmitBtn:hover {
-    color: white;
-    background-color: #8b5cf6;
 }
 
 .projectContainer {
@@ -352,9 +270,9 @@ dialog::backdrop {
 }
 
 .projectContainer > div:hover {
-    color: purple;
+    color: white;
     font-size: larger;
-    background-color: white;
+    background-color: #5b21b6;
 }
 
 .taskContainer {
@@ -392,8 +310,8 @@ dialog::backdrop {
     grid-template-rows: repeat(4, 1fr) 2fr;
     height: 300px;
     width: 320px;
-    background-color: purple;
-    border: 1px solid white;
+    color: white;
+    background-color: #818cf8;
     font-weight: 600;
     font-size: large;
     padding-left: 10px;
@@ -419,36 +337,6 @@ dialog::backdrop {
 }
 
 
-.priorityLow {
-    border: 1px solid green;
-    color: green;
-}
-
-.priorityHigh {
-    border: 1px solid blue;
-    color: blue;
-}
-
-.priorityExtreme {
-    border: 1px solid purple;
-    color: purple;
-}
-
-.priorityExtreme:hover {
-    background-color: purple;
-    color: white;
-}
-
-.priorityHigh:hover {
-    background-color: blue;
-    color: white;
-}
-
-.priorityLow:hover {
-    background-color: green;
-    color: white;
-}
-
 .detailsPriorityContainer {
     display: flex;
     gap: 20px;
@@ -463,34 +351,161 @@ dialog::backdrop {
     align-self: center;
 }
 
+.formDialog {
+    background-color: #ddd6fe;
+}
+
+.mainFormContainer {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 5fr;
+    height: 330px;
+    width: 430px;
+}
+
+.formHeader {
+    grid-column: 1/3;
+    grid-row: 1/2;
+    height: 50px;
+    font-size: x-large;
+    font-weight: bolder;
+    border-bottom: 2px inset white;
+}
+
+.formWrapper {
+    grid-column: 1/2;
+    grid-row: 2/3;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 15px;
+}
+
+.formDisplay {
+    grid-column: 2/3;
+    grid-row: 2/3;
+}
+
+.taskForm {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr) 3fr;
+    padding: 15px;
+    gap: 10px;
+}
+
+.taskTitleInput {
+    grid-column: 1/3;
+    grid-row: 1/2;
+    height: 26px;
+    align-self: center;
+}
+
+.inputTaskDetails {
+    grid-column: 1/3;
+    grid-row: 2/3;
+}
+
+.dateLabel {
+    grid-column: 1/2;
+    grid-row: 3/4;
+    align-self: center;
+    font-size: large;
+}
+
+#date {
+    height: 20px;
+    grid-column: 2/3;
+    grid-row: 3/4;
+    align-self: center;
+}
+
+.priorityLabel {
+    grid-column: 1/2;
+    grid-row: 4/5;
+    font-size: large;
+}
+
+.priorityOptionContainer {
+    display: flex;
+    grid-column: 2/3;
+    grid-row: 4/5;
+    justify-content: space-around;
+}
+
+.priorityLow,
+.priorityHigh,
+.priorityExtreme {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 63px;
+    height: 23px;
+    color: white;
+    cursor: pointer;
+}
+
+.taskFormSubmitBtn {
+    width: 150px;
+    height: 30px;
+    background-color: white;
+    border: none;
+    font-weight: bold;
+}
+
+.taskFormSubmitBtn:hover {
+    background-color: #5b21b6;
+    color: white;
+}
+
+
+.priorityExtremeDetails,
+.priorityHighDetails,
 .priorityLowDetails {
-    border: 1px solid green;
+    width: 100px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.priorityInputDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    gap: 7px;
+}
+
+.priorityLowDetails {
     color: green;
+    margin-top: 4px;
 }
 
 .priorityHighDetails {
-    border: 1px solid blue;
     color: blue;
 }
 
 .priorityExtremeDetails {
-    border: 1px solid purple;
-    color: purple;
+    color: purple
 }
 
-.priorityExtremeDetails:hover {
-    background-color: purple;
+
+.projectForm {
+    margin-top: 20px;
+    height: 270px;
+}
+
+
+#projectInputLabel {
+    height: 15px;
+    margin-right: 5px;
+}
+
+.submitBtn {
+    width: 100px;
+    height: 20px;
+    background-color: white;
+    border: none;
+}
+
+.submitBtn:hover {
+    background-color: #5b21b6;
     color: white;
 }
-
-.priorityHighDetails:hover {
-    background-color: blue;
-    color: white;
-}
-
-.priorityLowDetails:hover {
-    background-color: green;
-    color: white;
-}
-
-
