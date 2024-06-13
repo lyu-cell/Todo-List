@@ -1,0 +1,553 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Todo List</title><script defer="defer" src="bundle.js"></script></head><body><header></header><div id="content"></div><div class="sidebar"></div><script>function taskUI(title, date, status, projectIndex, taskIndex) {
+        // elements are created here...
+        const taskContainer = document.querySelector(".taskContainer");
+        const taskInfoContainer = document.createElement("div");
+        const checkBoxAndTitleWrapper = document.createElement("div");
+        const detailsToDeleteWrapper = document.createElement("div");
+        const checkBox = document.createElement("input");
+        const taskTitle = document.createElement("div");
+        const taskDetails = document.createElement("button");
+        const taskDate = document.createElement("div");
+        const taskEdit = document.createElement("button");
+        const taskDelete = document.createElement("div");
+
+        //          taskContainer.classList.add(".taskContainer")
+        taskInfoContainer.classList.add("taskInfoContainer");
+        checkBoxAndTitleWrapper.classList.add("checkBoxTitleWrapper");
+        detailsToDeleteWrapper.classList.add("detailsToDeleteWrapper");
+        checkBox.classList.add("taskCheckBox");
+        taskTitle.classList.add("taskTitle");
+        taskDetails.classList.add("taskDetails");
+        taskDate.classList.add("taskDate");
+        taskEdit.classList.add("taskEdit");
+        taskEdit.setAttribute("onclick", "showTaskEditPanel()");
+        taskDelete.classList.add("taskDelete");
+
+        checkBox.setAttribute("type", "checkbox");
+        checkBox.setAttribute("onclick", "changeStatus()");
+        checkBox.setAttribute("data-project", `${projectIndex}`);
+        checkBox.setAttribute("data-task", `${taskIndex}`);
+        taskTitle.textContent = `${title}`;
+        taskDetails.textContent = "Details";
+        taskDetails.setAttribute("data-task", `${taskIndex}`);
+        taskDetails.setAttribute("data-project", `${projectIndex}`);
+        taskDetails.setAttribute("onclick", "showTaskDetails()");
+        taskEdit.setAttribute("data-project", `${projectIndex}`);
+        taskEdit.setAttribute("data-task", `${taskIndex}`);
+        taskDelete.setAttribute("data-project", `${projectIndex}`);
+        taskDelete.setAttribute("data-task", `${taskIndex}`);
+        taskDelete.setAttribute("onclick", "deleteTask()");
+        taskDate.textContent = `${date}`;
+        taskEdit.textContent = "Edit";
+        taskDelete.textContent = "Delete";
+
+        // elements are appended here...
+        taskContainer.appendChild(taskInfoContainer);
+        taskInfoContainer.appendChild(checkBoxAndTitleWrapper);
+        taskInfoContainer.appendChild(detailsToDeleteWrapper);
+        checkBoxAndTitleWrapper.appendChild(checkBox);
+        checkBoxAndTitleWrapper.appendChild(taskTitle);
+        detailsToDeleteWrapper.appendChild(taskDetails);
+        detailsToDeleteWrapper.appendChild(taskDate);
+        detailsToDeleteWrapper.appendChild(taskEdit);
+        detailsToDeleteWrapper.appendChild(taskDelete);
+        if (status !== "complete") {
+          checkBox.checked = false;
+        } else if (status === "complete") {
+          checkBox.checked = true;
+        }
+      }
+
+      function projectBackgroundUi(name, projectIndex) {
+        const content = document.querySelector("#content");
+
+        if (document.querySelector(".taskDisplay") !== null) {
+          content.removeChild(document.querySelector(".taskDisplay"));
+        }
+
+        const taskDisplay = document.createElement("div");
+        const projectName = document.createElement("div");
+        const taskContainer = document.createElement("div");
+
+        taskDisplay.classList.add("taskDisplay");
+        projectName.classList.add("projectName");
+        projectName.setAttribute("data-key", `${projectIndex}`);
+        taskContainer.classList.add("taskContainer");
+
+        projectName.textContent = `${name}`;
+
+        content.appendChild(taskDisplay);
+        taskDisplay.appendChild(projectName);
+        taskDisplay.appendChild(taskContainer);
+
+        const ShowAllTasks = (function () {
+          const arrayStorage = JSON.parse(localStorage.arrayStorage);
+          for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
+            let titleStore = arrayStorage[projectIndex][i].title;
+            let dateStore = arrayStorage[projectIndex][i].date;
+            let status = arrayStorage[projectIndex][i].status;
+            taskUI(titleStore, dateStore, status, projectIndex, i);
+          }
+        })();
+      }
+
+      function showDeleteProjectBackgroundUi(project, projectIndex) {
+        document.querySelector(".taskDisplay").remove();
+        const content = document.querySelector("#content");
+        const projectName = document.createElement("div");
+        const taskDisplay = document.createElement("div");
+        const taskContainer = document.createElement("div");
+        const deleteInfoContainer = document.createElement("div");
+        const deleteButtonTitle = document.createElement("div");
+        const deleteProjectBtn = document.createElement("button");
+
+        taskDisplay.classList.add("taskDisplay");
+        projectName.classList.add("projectName");
+        taskContainer.classList.add("taskContainer");
+        deleteInfoContainer.classList.add("deleteInfoContainer");
+        deleteButtonTitle.classList.add("deleteButtonTitle");
+        deleteProjectBtn.classList.add("deleteProjectBtn");
+        projectName.textContent = `${project}`;
+        projectName.setAttribute("data-key", `${projectIndex}`);
+        deleteProjectBtn.setAttribute("onclick", "deleteProject()");
+        deleteProjectBtn.setAttribute("data-project", `${projectIndex}`);
+        deleteButtonTitle.textContent =
+          "'Click' below to remove the current project";
+        deleteProjectBtn.textContent = "Remove Project";
+
+        content.appendChild(taskDisplay);
+        taskDisplay.appendChild(projectName);
+        taskDisplay.appendChild(taskContainer);
+        taskContainer.appendChild(deleteInfoContainer);
+        deleteInfoContainer.appendChild(deleteButtonTitle);
+        deleteInfoContainer.appendChild(deleteProjectBtn);
+      }
+
+      function sendProjectIndex() {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage);
+        projectBackgroundUi(
+          arrayStorage[event.target.dataset.key][0],
+          event.target.dataset.key
+        );
+
+        if (
+          arrayStorage[event.target.dataset.key].length < 2 &&
+          event.target.dataset.key !== "0"
+        ) {
+          showDeleteProjectBackgroundUi(
+            arrayStorage[event.target.dataset.key][0],
+            event.target.dataset.key
+          );
+        }
+      }
+
+      function editTask() {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage);
+        const projectIndex = event.target.dataset.project;
+        const taskIndex = event.target.dataset.task;
+        const editTaskTitle = document.querySelector(".editTaskTitleInput");
+        const editDateInput = document.querySelector("#editDateInput");
+        const editDetailsInput = document.querySelector(".editDetailsInput");
+
+        arrayStorage[projectIndex][taskIndex].title = editTaskTitle.value;
+        arrayStorage[projectIndex][taskIndex].date = editDateInput.value;
+        arrayStorage[projectIndex][taskIndex].description =
+          editDetailsInput.value;
+        localStorage.arrayStorage = JSON.stringify(arrayStorage);
+
+        document.querySelector(".taskContainer").remove();
+        const taskContainer = document.createElement("div");
+        taskContainer.classList.add("taskContainer");
+        document.querySelector(".taskDisplay").appendChild(taskContainer);
+
+        const ShowAllTasks = (function () {
+          const arrayStorage = JSON.parse(localStorage.arrayStorage);
+          for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
+            let titleStore = arrayStorage[projectIndex][i].title;
+            let dateStore = arrayStorage[projectIndex][i].date;
+            let status = arrayStorage[projectIndex][i].status;
+            taskUI(titleStore, dateStore, status, projectIndex, i);
+          }
+        })();
+      }
+
+      function showTaskEditPanel() {
+        if (document.querySelector(".editPanelDialog") !== null) {
+          document.querySelector(".editPanelDialog").remove();
+        }
+        const content = document.querySelector("#content");
+        const dialog = document.createElement("dialog");
+        const editPanelContainer = document.createElement("div");
+        const editPanelHeader = document.createElement("div");
+        const formInputContainer = document.createElement("div");
+        const taskTitleInput = document.createElement("input");
+        const descriptionInput = document.createElement("input");
+        const dateInputContainer = document.createElement("div");
+        const dateInput = document.createElement("input");
+        const dateInputLabel = document.createElement("label");
+        const confirmEditBtn = document.createElement("button");
+        const arrayStorage = JSON.parse(localStorage.arrayStorage);
+        const priorityInputContainer = document.createElement("div");
+        const priorityOptionContainer = document.createElement("div");
+        const priorityLabel = document.createElement("div");
+        const low = document.createElement("div");
+        const high = document.createElement("div");
+        const extreme = document.createElement("div");
+
+        let projectIndex = event.target.dataset.project;
+        let taskIndex = event.target.dataset.task;
+        let title = arrayStorage[projectIndex][taskIndex].title;
+        let date = arrayStorage[projectIndex][taskIndex].date;
+        let description = arrayStorage[projectIndex][taskIndex].description;
+        let priority = arrayStorage[projectIndex][taskIndex].priority;
+
+        dialog.classList.add("editPanelDialog");
+        editPanelContainer.classList.add(".editContainer");
+        formInputContainer.classList.add(".formInputContainer");
+        taskTitleInput.classList.add("editTaskTitleInput");
+        descriptionInput.classList.add("editDetailsInput");
+        priorityInputContainer.classList.add("priorityInputDetailsContainer")
+        low.classList.add("priorityLowDetails");
+        high.classList.add("priorityHighDetails");
+        extreme.classList.add("priorityExtremeDetails");
+
+        dateInput.setAttribute("id", "editDateInput");
+        dateInput.setAttribute("type", "date");
+        dateInputLabel.setAttribute("for", "editDateInput");
+        editPanelHeader.classList.add("editPanelHeader");
+        confirmEditBtn.classList.add("ConfirmEditBtn");
+        dateInputLabel.textContent = "Date: ";
+        editPanelHeader.textContent = "Edit task here...";
+        confirmEditBtn.textContent = "Confirm Edit";
+        priorityLabel.textContent = "Priority: ";
+        taskTitleInput.value = `${title}`;
+        dateInput.value = `${date}`;
+        descriptionInput.value = `${description}`;
+
+        low.textContent = "Low";
+        high.textContent = "High";
+        extreme.textContent = "Extreme";
+
+        confirmEditBtn.setAttribute(
+          "data-project",
+          `${event.target.dataset.project}`
+        );
+        confirmEditBtn.setAttribute(
+          "data-task",
+          `${event.target.dataset.task}`
+        );
+        confirmEditBtn.setAttribute("onclick", "editTask()");
+
+        content.appendChild(dialog);
+        dialog.appendChild(editPanelContainer);
+        editPanelContainer.appendChild(editPanelHeader);
+        editPanelContainer.appendChild(formInputContainer);
+        editPanelContainer.appendChild(confirmEditBtn);
+        formInputContainer.appendChild(taskTitleInput);
+        formInputContainer.appendChild(descriptionInput);
+        formInputContainer.appendChild(dateInputContainer);
+        dateInputContainer.appendChild(dateInputLabel);
+        dateInputContainer.appendChild(dateInput);
+        formInputContainer.appendChild(priorityInputContainer);
+        priorityInputContainer.appendChild(priorityLabel);
+        priorityInputContainer.appendChild(low);
+        priorityInputContainer.appendChild(high);
+        priorityInputContainer.appendChild(extreme);
+
+        dialog.showModal();
+
+        function showSelectedPriority() {
+          let priorityColor = "";
+          let priorityClass = "";
+
+          if (priority === "Extreme") {
+            (priorityClass = ".priorityExtremeDetails"),
+              (priorityColor = "purple");
+          } else if (priority === "High") {
+            (priorityClass = ".priorityHighDetails"), (priorityColor = "blue");
+          } else if (priority === "Low") {
+            (priorityClass = ".priorityLowDetails"), (priorityColor = "green");
+          }
+          document.querySelector(
+            `${priorityClass}`
+          ).style.cssText = `background-color: ${priorityColor}; color: white;`;
+        }
+        showSelectedPriority();
+
+        function changePriorityOnClick() {
+          low.addEventListener("click", () => {
+            high.style.cssText = "background-color: white; color: blue"
+            extreme.style.cssText = "background-color: white; color: purple;"
+            
+            low.style.cssText = "background-color: green; color: white;";
+          });
+
+          high.addEventListener("click", () => {
+            low.style.cssText = "background-color: white; color: green;"
+            extreme.style.cssText = "background-color: white; color: purple;"
+
+            high.style.cssText = "background-color: blue; color: white;";
+          });
+          
+          extreme.addEventListener("click", () => {
+            low.style.cssText = "background-color: white; color: green"
+            high.style.cssText = "background-color: white; color: blue"
+
+            extreme.style.cssText = "background-color: purple; color: white;";
+          });
+        }
+
+        document
+          .querySelector(".priorityLowDetails")
+          .addEventListener("click", () => {
+            arrayStorage[projectIndex][taskIndex].priority = "Low";
+            localStorage.arrayStorage = JSON.stringify(arrayStorage);
+          });
+        document
+          .querySelector(".priorityHighDetails")
+          .addEventListener("click", () => {
+            arrayStorage[projectIndex][taskIndex].priority = "High";
+            localStorage.arrayStorage = JSON.stringify(arrayStorage);
+          });
+        document
+          .querySelector(".priorityExtremeDetails")
+          .addEventListener("click", () => {
+            arrayStorage[projectIndex][taskIndex].priority = "Extreme";
+            localStorage.arrayStorage = JSON.stringify(arrayStorage);
+          });
+
+        changePriorityOnClick();
+
+        /*styles here... it seems that the elements within the dialog element can't be styled
+         using external css files and have to be styles where it was create "i.e" inside script tag.*/
+        editPanelContainer.style.cssText =
+          "display: flex; height: 300px; width: 400px; flex-direction: column; gap: 10px";
+
+        editPanelHeader.style.cssText =
+          "display: flex; align-items: center; padding-left: 15px; font-style: italic; font-weight: 600; font-size: large; \
+          height: 50px;";
+
+        formInputContainer.style.cssText =
+          "display: flex; height: 150px; width 200px; padding-left: 20px; \
+          adding-top: 25px; flex-direction: column; gap: 20px;";
+
+        confirmEditBtn.style.cssText =
+          "width: 100px; align-self: center; justify-self: center; margin-top: 10px";
+
+        taskTitleInput.style.cssText = "width: 200px; height: 20px;";
+        descriptionInput.style.cssText = "width: 200px; height: 20px;";
+        dateInput.style.cssText = "width: 164px; height: 20px;";
+
+        confirmEditBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          dialog.close();
+        });
+      }
+
+      function deleteTask() {
+        let arrayStorage = JSON.parse(localStorage.arrayStorage);
+        const projectIndex = event.target.dataset.project;
+        const taskIndex = event.target.dataset.task;
+
+        arrayStorage[projectIndex].splice(taskIndex, 1);
+
+        const updateLocalStorage = (() => {
+          if (arrayStorage.length !== 0) {
+            localStorage.arrayStorage = JSON.stringify(arrayStorage);
+          }
+        })();
+
+        document.querySelector(".taskContainer").remove();
+        const taskContainer = document.createElement("div");
+        taskContainer.classList.add("taskContainer");
+        document.querySelector(".taskDisplay").appendChild(taskContainer);
+
+        const ShowAllTasks = (function () {
+          for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
+            let titleStore = arrayStorage[projectIndex][i].title;
+            let dateStore = arrayStorage[projectIndex][i].date;
+            taskUI(titleStore, dateStore, projectIndex, i);
+          }
+        })();
+
+        const previousProjectIndex = event.target.dataset.project;
+        if (
+          arrayStorage[previousProjectIndex].length < 2 &&
+          Number(previousProjectIndex) !== 0
+        ) {
+          showDeleteProjectBackgroundUi(
+            arrayStorage[previousProjectIndex][0],
+            previousProjectIndex
+          );
+        } else if (arrayStorage.length === 0) {
+          console.log(previousProjectIndex);
+        } else {
+          projectBackgroundUi(
+            arrayStorage[previousProjectIndex][0],
+            previousProjectIndex
+          );
+        }
+      }
+
+      function appendAllProjectFromLocal() {
+        document.querySelector(".projectContainer").remove();
+        const projectContainer = document.createElement("div");
+        projectContainer.classList.add("projectContainer");
+
+        function makeAllProjectUi(projectName, index) {
+          const sidebar = document.querySelector(".sidebar");
+          const projectUI = document.createElement("div");
+
+          sidebar.appendChild(projectContainer);
+
+          if (projectName === "#Home" || index === 0) {
+            projectUI.textContent = `${projectName}`;
+            projectUI.setAttribute("data-key", `${index}`);
+            projectUI.classList.add("defaultProject");
+            projectUI.classList.add("allProject");
+            projectUI.setAttribute("onclick", "sendProjectIndex()");
+            projectContainer.appendChild(projectUI);
+          } else {
+            projectUI.textContent = `${projectName}`;
+            projectUI.setAttribute("data-key", `${index}`);
+            projectUI.classList.add("allProject");
+            projectUI.setAttribute("onclick", "sendProjectIndex()");
+            projectContainer.appendChild(projectUI);
+          }
+        }
+
+        const makeAllProjectAppear = (function () {
+          const arrayStorage = JSON.parse(localStorage.arrayStorage);
+
+          for (let i = 0; i < arrayStorage.length; i++) {
+            makeAllProjectUi(arrayStorage[i][0], i);
+          }
+        })();
+      }
+
+      function refreshBackgroundAndSidebar(projectIndex) {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage);
+
+        if (arrayStorage[projectIndex].length > 1 || projectIndex === 0) {
+          projectBackgroundUi(arrayStorage[projectIndex][0], projectIndex);
+          appendAllProjectFromLocal();
+        } else if (projectIndex !== 0) {
+          showDeleteProjectBackgroundUi(
+            arrayStorage[projectIndex][0],
+            projectIndex
+          );
+          appendAllProjectFromLocal();
+        }
+      }
+      // this function removes the clicked projects from localStorage and immediately updates sidebar UI
+      function deleteProject() {
+        let arrayStorage = JSON.parse(localStorage.arrayStorage);
+        let projectIndex = Number(event.target.dataset.project);
+
+        if (projectIndex !== 0) {
+          arrayStorage.splice(Number(event.target.dataset.project), 1);
+          localStorage.arrayStorage = JSON.stringify(arrayStorage);
+
+          if (arrayStorage.length === projectIndex) {
+            --projectIndex;
+            refreshBackgroundAndSidebar(projectIndex);
+          } else {
+            refreshBackgroundAndSidebar(projectIndex);
+          }
+        }
+      }
+
+      function showTaskDetails() {
+        const arrayStorage = JSON.parse(localStorage.arrayStorage);
+        let taskIndex = event.target.dataset.task;
+        let projectIndex = event.target.dataset.project;
+        const taskTitle = arrayStorage[projectIndex][taskIndex].title;
+        const taskDate = arrayStorage[projectIndex][taskIndex].date;
+        const status = arrayStorage[projectIndex][taskIndex].status;
+        const taskDescription =
+          arrayStorage[projectIndex][taskIndex].description;
+        const priority = arrayStorage[projectIndex][taskIndex].priority;
+
+        function showDetails() {
+          const content = document.querySelector("#content");
+          const dialog = document.createElement("dialog");
+          const taskDetailsContainer = document.createElement("div");
+          const title = document.createElement("div");
+          const date = document.createElement("div");
+          const descriptionContainer = document.createElement("div");
+          const closeBtn = document.createElement("button");
+          const priorityLabel = document.createElement("div");
+          const priorityOptionContainer = document.createElement("div");
+          const priorityInput = document.createElement("div");
+
+          taskDetailsContainer.classList.add("taskDetailsContainer");
+          title.classList.add("detailsTitle");
+          date.classList.add("detailsDate");
+          closeBtn.classList.add("closeDetailsBtn");
+          descriptionContainer.classList.add("descriptionContainer");
+          priorityLabel.classList.add("detailsPriorityLabel");
+          priorityOptionContainer.classList.add("detailsPriorityContainer");
+          priorityInput.classList.add("priorityInput");
+
+          title.textContent = `Title: ${taskTitle}`;
+          date.textContent = `Date: ${taskDate}`;
+          descriptionContainer.textContent = `Description: ${taskDescription}`;
+          descriptionContainer.setAttribute("type", "text");
+          closeBtn.textContent = "Close";
+          priorityLabel.textContent = "priority: ";
+          priorityInput.style.cssText = "color: white;";
+          priorityInput.textContent = `${priority}`;
+
+          content.appendChild(dialog);
+          dialog.appendChild(taskDetailsContainer);
+          taskDetailsContainer.appendChild(title);
+          taskDetailsContainer.appendChild(date);
+          taskDetailsContainer.appendChild(descriptionContainer);
+          taskDetailsContainer.appendChild(priorityOptionContainer);
+          priorityOptionContainer.appendChild(priorityLabel);
+          priorityOptionContainer.appendChild(priorityInput);
+
+          taskDetailsContainer.appendChild(closeBtn);
+
+          dialog.showModal();
+          closeBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            dialog.close();
+            taskDetailsContainer.remove();
+          });
+        }
+
+        if (document.querySelector(".taskDetailsContainer") === null) {
+          showDetails();
+        }
+      }
+
+      function changeStatus() {
+        let projectIndex = event.target.dataset.project;
+        let taskIndex = event.target.dataset.task;
+        let arrayStorage = JSON.parse(localStorage.arrayStorage);
+        let status =
+          arrayStorage[event.target.dataset.project][event.target.dataset.task];
+
+        if (status.status !== "complete") {
+          arrayStorage[projectIndex][taskIndex].status = "complete";
+          localStorage.arrayStorage = JSON.stringify(arrayStorage);
+        } else if (status.status === "complete") {
+          arrayStorage[projectIndex][taskIndex].status = "ongoing";
+          localStorage.arrayStorage = JSON.stringify(arrayStorage);
+        }
+
+        document.querySelector(".taskContainer").remove();
+        let taskContainer = document.createElement("div");
+        taskContainer.classList.add("taskContainer");
+        document.querySelector(".taskDisplay").appendChild(taskContainer);
+        for (let i = 1; i < arrayStorage[projectIndex].length; i++) {
+          taskUI(
+            arrayStorage[projectIndex][i].title,
+            arrayStorage[projectIndex][i].date,
+            arrayStorage[projectIndex][i].status,
+            projectIndex,
+            i
+          );
+        }
+      }</script></body></html>
