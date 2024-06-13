@@ -111,6 +111,10 @@ const generate = (function () {
   return { element };
 })();
 
+function addLocalStorage() {
+  localStorage.arrayStorage = ""
+}
+
 const getElement = (function () {
   const header = document.querySelector("header");
   const sideBar = document.querySelector(".sidebar");

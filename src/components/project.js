@@ -1,4 +1,7 @@
 const project = (function() {
+    if(localStorage.arrayStorage === undefined) [
+        localStorage.arrayStorage = ""
+    ]
     const sendItems = (function() {
         const arrayStorage = JSON.parse(localStorage.arrayStorage)
 
