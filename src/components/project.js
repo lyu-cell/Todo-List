@@ -33,5 +33,6 @@ const project = (function() {
 
     return {initializeProject, appendTask}
 })()
+//
 
 export {project}

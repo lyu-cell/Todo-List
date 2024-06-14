@@ -279,7 +279,7 @@ function appendAllProjectFromLocal() {
     }
   })();
 }
-
+//
 const displayProjectContents = (function () {
   const appendProjectUi = (function () {
     function makeAndAppendProjectUI() {
@@ -374,7 +374,7 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
     description.value = ""
   }
   });
-
+//
 function taskUI(title, date, status, projectIndex, taskIndex) {
   // elements are created here...
   const taskContainer = document.querySelector(".taskContainer");
