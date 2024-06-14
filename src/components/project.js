@@ -1,6 +1,6 @@
 const project = (function() {
     if(localStorage.arrayStorage === undefined) [
-        localStorage.arrayStorage = ""
+        localStorage.arrayStorage = JSON.stringify([["Home"]])
     ]
     const sendItems = (function() {
         const arrayStorage = JSON.parse(localStorage.arrayStorage)
@@ -31,18 +31,7 @@ const project = (function() {
         }
     }
 
-    const initializeStorage = (() => {
-        const appendDefault = (() => {
-            if (localStorage.arrayStorage === "" && sendItems().arrayStorageStats() === 0) {
-                sendItems().storeProject(["#Home"])
-            }
-        })()
-    })()
-    
     return {initializeProject, appendTask}
 })()
 
 export {project}
-
-
-///

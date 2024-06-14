@@ -225,6 +225,7 @@ const sideBarUi = (function () {
       }
 
       generate.element.taskFormText.addEventListener("click", () => {
+        document.querySelector("#projectInputLabel").value = ""
         if (QueryElement(".projectForm") !== null) {
           const projectForm = document.querySelector(".projectForm");
           formDisplay.removeChild(projectForm);
@@ -344,6 +345,7 @@ generate.element.taskFormSUbmitBtn.addEventListener("click", (e) => {
   const taskTitle = generate.element.taskTitle;
   const dateInput = generate.element.dateInput;
   const description = document.querySelector(".inputTaskDetails");
+
 
   if(taskTitle.value === "" || dateInput.value === '' || priorityStore === "") return alert("FIll the title, date & priority filed")
 
